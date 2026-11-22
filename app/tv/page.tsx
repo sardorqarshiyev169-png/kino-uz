@@ -1,9 +1,9 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import MovieCard from '@/components/MovieCard';
-import { INITIAL_MOVIES } from '@/lib/tmdb';
-import { Tv, Search, Star, Layers, Calendar, Play } from 'lucide-react';
+import { INITIAL_MOVIES, fetchFromTMDB, formatTmdbItem } from '@/lib/tmdb';
+import { Tv, Search, Layers, Play, RefreshCw, Loader2, Sparkles } from 'lucide-react';
 import { Movie } from '@/lib/types';
 import { useStore } from '@/lib/store';
 
@@ -13,12 +13,83 @@ export default function TVSeriesPage() {
   const [filterTab, setFilterTab] = useState<'all' | 'popular' | 'trending' | 'topRated'>('all');
   const [selectedSeries, setSelectedSeries] = useState<Movie | null>(null);
 
-  const tvSeries = useMemo(() => {
-    return INITIAL_MOVIES.filter((m) => m.media_type === 'tv');
+  const [tmdbSeries, setTmdbSeries] = useState<Movie[]>([]);
+  const [tmdbPage, setTmdbPage] = useState(1);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
+
+  // Initial load: fetch popular TV series from TMDB
+  useEffect(() => {
+    async function loadInitialTmdbSeries() {
+      setIsInitialLoading(true);
+      try {
+        const [popData, topData] = await Promise.all([
+          fetchFromTMDB('/tv/popular', { page: '1' }),
+          fetchFromTMDB('/tv/top_rated', { page: '1' }),
+        ]);
+
+        const combinedRaw = [
+          ...(popData?.results || []),
+          ...(topData?.results || []),
+        ];
+
+        const formatted = combinedRaw
+          .filter((item) => item.poster_path)
+          .map((item) => formatTmdbItem(item, 'tv'));
+
+        setTmdbSeries(formatted);
+      } catch (err) {
+        console.warn('Failed to fetch TMDB TV series:', err);
+      } finally {
+        setIsInitialLoading(false);
+      }
+    }
+
+    loadInitialTmdbSeries();
   }, []);
 
+  const handleLoadMore = async () => {
+    setIsLoadingMore(true);
+    const nextPage = tmdbPage + 1;
+    try {
+      const data = await fetchFromTMDB('/tv/popular', { page: String(nextPage) });
+      if (data?.results && Array.isArray(data.results)) {
+        const formatted = (data.results as any[])
+          .filter((item) => item.poster_path)
+          .map((item) => formatTmdbItem(item, 'tv'));
+
+        setTmdbSeries((prev) => {
+          const seen = new Set(prev.map((m) => String(m.id)));
+          const newOnes = formatted.filter((m) => !seen.has(String(m.id)));
+          return [...prev, ...newOnes];
+        });
+
+        setTmdbPage(nextPage);
+      }
+    } catch (err) {
+      console.warn('Failed to load more TV series:', err);
+    } finally {
+      setIsLoadingMore(false);
+    }
+  };
+
+  const allSeries = useMemo(() => {
+    const local = INITIAL_MOVIES.filter((m) => m.media_type === 'tv');
+    const combined = [...local];
+    const seenIds = new Set<string>(local.map((m) => String(m.id)));
+
+    for (const s of tmdbSeries) {
+      const sId = String(s.id);
+      if (!seenIds.has(sId)) {
+        seenIds.add(sId);
+        combined.push(s);
+      }
+    }
+    return combined;
+  }, [tmdbSeries]);
+
   const filteredSeries = useMemo(() => {
-    return tvSeries.filter((series) => {
+    return allSeries.filter((series) => {
       const q = search.toLowerCase().trim();
       const matchesSearch =
         !q ||
@@ -27,12 +98,12 @@ export default function TVSeriesPage() {
 
       if (!matchesSearch) return false;
 
-      if (filterTab === 'popular') return series.isPopular;
-      if (filterTab === 'trending') return series.isTrending;
+      if (filterTab === 'popular') return series.isPopular || series.vote_average >= 8.0;
+      if (filterTab === 'trending') return series.isTrending || (series.vote_count || 0) > 1000;
       if (filterTab === 'topRated') return series.vote_average >= 8.5;
       return true;
     });
-  }, [tvSeries, search, filterTab]);
+  }, [allSeries, search, filterTab]);
 
   return (
     <div className="min-h-screen py-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
@@ -41,13 +112,13 @@ export default function TVSeriesPage() {
         <div>
           <div className="flex items-center gap-2 text-kinopurple-primary text-xs font-bold uppercase tracking-wider mb-1">
             <Tv className="h-4 w-4" />
-            <span>Seriallar olami</span>
+            <span>Seriallar olami • Jonli TMDB Baza</span>
           </div>
           <h1 className="font-heading text-3xl sm:text-4xl font-black text-white tracking-tight">
             Ommabop Seriallar
           </h1>
           <p className="text-sm text-kinotext-muted mt-1">
-            Mavsumlar, epizodlar va unutilmas ko'p qismli hikoyalar
+            Mavsumlar, epizodlar va unutilmas ko'p qismli jahon shohlari
           </p>
         </div>
 
@@ -61,7 +132,7 @@ export default function TVSeriesPage() {
                 : 'text-kinotext-muted hover:text-white'
             }`}
           >
-            Barchasi
+            Barchasi ({allSeries.length})
           </button>
           <button
             onClick={() => setFilterTab('trending')}
@@ -99,21 +170,53 @@ export default function TVSeriesPage() {
       </div>
 
       {/* TV Series Grid */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-6">
-        {filteredSeries.map((series) => (
-          <div key={series.id} className="relative group">
-            <MovieCard movie={series} />
-            {series.seasons && (
-              <button
-                onClick={() => setSelectedSeries(series)}
-                className="w-full mt-2 flex items-center justify-center gap-1.5 rounded-xl border border-kinodark-border bg-kinodark-surface py-1.5 text-[11px] font-semibold text-kinopurple-secondary hover:border-kinopurple-primary/50 transition"
-              >
-                <Layers className="h-3 w-3" />
-                Mavsumlar & Qismlar ({series.seasons.length})
-              </button>
-            )}
-          </div>
-        ))}
+      {filteredSeries.length > 0 ? (
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-6">
+          {filteredSeries.map((series) => (
+            <div key={series.id} className="relative group">
+              <MovieCard movie={series} />
+              {series.seasons && (
+                <button
+                  onClick={() => setSelectedSeries(series)}
+                  className="w-full mt-2 flex items-center justify-center gap-1.5 rounded-xl border border-kinodark-border bg-kinodark-surface py-1.5 text-[11px] font-semibold text-kinopurple-secondary hover:border-kinopurple-primary/50 transition"
+                >
+                  <Layers className="h-3 w-3" />
+                  Mavsumlar & Qismlar ({series.seasons.length})
+                </button>
+              )}
+            </div>
+          ))}
+        </div>
+      ) : isInitialLoading ? (
+        <div className="flex flex-col items-center justify-center p-16 text-center">
+          <Loader2 className="h-8 w-8 text-kinopurple-primary animate-spin mb-3" />
+          <p className="text-xs text-kinotext-muted">Seriallar bazadan yuklanmoqda...</p>
+        </div>
+      ) : (
+        <div className="p-12 text-center text-kinotext-muted text-xs">
+          Hech qanday serial topilmadi.
+        </div>
+      )}
+
+      {/* Load More Button */}
+      <div className="mt-12 text-center">
+        <button
+          onClick={handleLoadMore}
+          disabled={isLoadingMore}
+          className="inline-flex items-center gap-2 rounded-2xl border border-kinopurple-primary/40 bg-kinopurple-primary/10 px-8 py-3.5 text-sm font-bold text-kinopurple-secondary hover:bg-kinopurple-primary/20 transition disabled:opacity-50"
+        >
+          {isLoadingMore ? (
+            <>
+              <Loader2 className="h-4 w-4 animate-spin" />
+              <span>Yangi seriallar yuklanmoqda...</span>
+            </>
+          ) : (
+            <>
+              <RefreshCw className="h-4 w-4" />
+              <span>Yana ko'proq seriallarni yuklash</span>
+            </>
+          )}
+        </button>
       </div>
 
       {/* Seasons & Episodes Modal / Drawer */}

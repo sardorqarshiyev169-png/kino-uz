@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import HeroBanner from '@/components/HeroBanner';
 import MovieCarousel from '@/components/MovieCarousel';
 import AiChatWidget from '@/components/AiChatWidget';
@@ -13,6 +13,8 @@ import {
   getRecentMovies,
   getTVSeries,
   getAnimeList,
+  fetchFromTMDB,
+  formatTmdbItem,
 } from '@/lib/tmdb';
 import {
   Flame,
@@ -29,17 +31,92 @@ import {
 } from 'lucide-react';
 
 export default function HomePage() {
-  const trending = getTrendingMovies();
-  const popular = getPopularMovies();
-  const topRated = getTopRatedMovies();
-  const recent = getRecentMovies();
-  const tvSeries = getTVSeries();
-  const anime = getAnimeList();
+  const [trending, setTrending] = useState(getTrendingMovies);
+  const [popular, setPopular] = useState(getPopularMovies);
+  const [topRated, setTopRated] = useState(getTopRatedMovies);
+  const [recent, setRecent] = useState(getRecentMovies);
+  const [tvSeries, setTvSeries] = useState(getTVSeries);
+  const [anime, setAnime] = useState(getAnimeList);
+  const [heroMovies, setHeroMovies] = useState(() =>
+    INITIAL_MOVIES.filter((m) => m.isFeatured || m.isTrending)
+  );
 
-  // Featured banner movies (hero carousel)
-  const heroMovies = INITIAL_MOVIES.filter((m) => m.isFeatured || m.isTrending);
+  // Fetch live weekly trending movies and latest releases from TMDB
+  useEffect(() => {
+    async function loadLiveWeeklyMovies() {
+      try {
+        const [trendData, popData, topData, nowData, tvData, animeData] = await Promise.all([
+          fetchFromTMDB('/trending/movie/week'),
+          fetchFromTMDB('/movie/popular'),
+          fetchFromTMDB('/movie/top_rated'),
+          fetchFromTMDB('/movie/now_playing'),
+          fetchFromTMDB('/tv/popular'),
+          fetchFromTMDB('/discover/tv', {
+            with_genres: '16',
+            with_original_language: 'ja',
+            sort_by: 'popularity.desc',
+          }),
+        ]);
 
-  // Personalized recommendations (mock tailored for Uzbek cinephiles)
+        if (trendData?.results && Array.isArray(trendData.results)) {
+          const list = trendData.results
+            .filter((x: any) => x.poster_path)
+            .slice(0, 16)
+            .map((x: any) => formatTmdbItem(x, 'movie'));
+          if (list.length > 0) {
+            setTrending(list);
+            setHeroMovies(list.slice(0, 5));
+          }
+        }
+
+        if (popData?.results && Array.isArray(popData.results)) {
+          const list = popData.results
+            .filter((x: any) => x.poster_path)
+            .slice(0, 16)
+            .map((x: any) => formatTmdbItem(x, 'movie'));
+          if (list.length > 0) setPopular(list);
+        }
+
+        if (topData?.results && Array.isArray(topData.results)) {
+          const list = topData.results
+            .filter((x: any) => x.poster_path)
+            .slice(0, 16)
+            .map((x: any) => formatTmdbItem(x, 'movie'));
+          if (list.length > 0) setTopRated(list);
+        }
+
+        if (nowData?.results && Array.isArray(nowData.results)) {
+          const list = nowData.results
+            .filter((x: any) => x.poster_path)
+            .slice(0, 16)
+            .map((x: any) => formatTmdbItem(x, 'movie'));
+          if (list.length > 0) setRecent(list);
+        }
+
+        if (tvData?.results && Array.isArray(tvData.results)) {
+          const list = tvData.results
+            .filter((x: any) => x.poster_path)
+            .slice(0, 16)
+            .map((x: any) => formatTmdbItem(x, 'tv'));
+          if (list.length > 0) setTvSeries(list);
+        }
+
+        if (animeData?.results && Array.isArray(animeData.results)) {
+          const list = animeData.results
+            .filter((x: any) => x.poster_path)
+            .slice(0, 16)
+            .map((x: any) => formatTmdbItem(x, 'anime'));
+          if (list.length > 0) setAnime(list);
+        }
+      } catch (err) {
+        console.warn('Failed to load weekly live movies:', err);
+      }
+    }
+
+    loadLiveWeeklyMovies();
+  }, []);
+
+  // Personalized recommendations (tailored for Uzbek cinephiles)
   const personalized = INITIAL_MOVIES.slice(0, 6);
 
   return (

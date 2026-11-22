@@ -1,9 +1,10 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import MovieCard from '@/components/MovieCard';
-import { INITIAL_MOVIES, GENRES } from '@/lib/tmdb';
-import { Search, Filter, SlidersHorizontal, ArrowUpDown, Film } from 'lucide-react';
+import { INITIAL_MOVIES, GENRES, fetchFromTMDB, formatTmdbItem } from '@/lib/tmdb';
+import { Movie } from '@/lib/types';
+import { Search, Film, Loader2, Sparkles, RefreshCw } from 'lucide-react';
 
 export default function MoviesPage() {
   const [search, setSearch] = useState('');
@@ -11,14 +12,129 @@ export default function MoviesPage() {
   const [selectedYear, setSelectedYear] = useState('all');
   const [minRating, setMinRating] = useState(0);
   const [sortBy, setSortBy] = useState<'popularity' | 'rating' | 'newest' | 'title'>('popularity');
-  const [page, setPage] = useState(1);
-  const pageSize = 12;
 
-  // Filter only movies or items playable as movies
-  const allMovies = useMemo(() => {
-    return INITIAL_MOVIES.filter((m) => m.media_type === 'movie');
+  // Live TMDB catalog state
+  const [tmdbMovies, setTmdbMovies] = useState<Movie[]>([]);
+  const [tmdbPage, setTmdbPage] = useState(1);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
+
+  // Initial load: fetch page 1 and page 2 from TMDB popular movies
+  useEffect(() => {
+    async function loadInitialTmdbMovies() {
+      setIsInitialLoading(true);
+      try {
+        const [page1Data, page2Data] = await Promise.all([
+          fetchFromTMDB('/movie/popular', { page: '1' }),
+          fetchFromTMDB('/movie/top_rated', { page: '1' }),
+        ]);
+
+        const combinedRaw = [
+          ...(page1Data?.results || []),
+          ...(page2Data?.results || []),
+        ];
+
+        const formatted = combinedRaw
+          .filter((item) => item.poster_path)
+          .map((item) => formatTmdbItem(item, 'movie'));
+
+        setTmdbMovies(formatted);
+      } catch (err) {
+        console.warn('Failed to fetch initial TMDB movies:', err);
+      } finally {
+        setIsInitialLoading(false);
+      }
+    }
+
+    loadInitialTmdbMovies();
   }, []);
 
+  // When a specific genre is selected, optionally fetch targeted discover movies from TMDB
+  useEffect(() => {
+    if (selectedGenre === 'all') return;
+
+    const matchedGenre = GENRES.find(
+      (g) =>
+        g.name.toLowerCase() === selectedGenre.toLowerCase() ||
+        (g.uzName && g.uzName.toLowerCase() === selectedGenre.toLowerCase())
+    );
+
+    if (!matchedGenre) return;
+
+    const genreId = matchedGenre.id;
+
+    async function loadGenreMovies() {
+      try {
+        const data = await fetchFromTMDB('/discover/movie', {
+          with_genres: String(genreId),
+          sort_by: 'popularity.desc',
+          page: '1',
+        });
+
+        if (data?.results && Array.isArray(data.results)) {
+          const formatted = (data.results as any[])
+            .filter((item) => item.poster_path)
+            .map((item) => formatTmdbItem(item, 'movie'));
+
+          setTmdbMovies((prev) => {
+            const seen = new Set(prev.map((m) => String(m.id)));
+            const newOnes = formatted.filter((m) => !seen.has(String(m.id)));
+            return [...prev, ...newOnes];
+          });
+        }
+      } catch (err) {
+        console.warn('Failed to load genre movies:', err);
+      }
+    }
+
+    loadGenreMovies();
+  }, [selectedGenre]);
+
+  // Load more movies button handler (fetches next page from TMDB)
+  const handleLoadMore = async () => {
+    setIsLoadingMore(true);
+    const nextPage = tmdbPage + 1;
+
+    try {
+      const data = await fetchFromTMDB('/movie/popular', { page: String(nextPage) });
+      if (data?.results && Array.isArray(data.results)) {
+        const formatted = (data.results as any[])
+          .filter((item) => item.poster_path)
+          .map((item) => formatTmdbItem(item, 'movie'));
+
+        setTmdbMovies((prev) => {
+          const seen = new Set(prev.map((m) => String(m.id)));
+          const newOnes = formatted.filter((m) => !seen.has(String(m.id)));
+          return [...prev, ...newOnes];
+        });
+
+        setTmdbPage(nextPage);
+      }
+    } catch (err) {
+      console.warn('Failed to load more movies:', err);
+    } finally {
+      setIsLoadingMore(false);
+    }
+  };
+
+  // Combine initial curated movies + live TMDB movies avoiding duplicates
+  const allMovies = useMemo(() => {
+    const local = INITIAL_MOVIES.filter((m) => m.media_type === 'movie');
+    const combined = [...local];
+    const seenIds = new Set<string>(local.map((m) => String(m.id)));
+
+    for (const m of tmdbMovies) {
+      const sId = String(m.id);
+      if (!seenIds.has(sId)) {
+        seenIds.add(sId);
+        combined.push(m);
+      }
+    }
+
+    return combined;
+  }, [tmdbMovies]);
+
+  // Filter movies
   const filteredMovies = useMemo(() => {
     return allMovies.filter((movie) => {
       // Search
@@ -38,7 +154,7 @@ export default function MoviesPage() {
         });
 
       // Year
-      const year = movie.release_date.substring(0, 4);
+      const year = (movie.release_date || '').substring(0, 4);
       const matchesYear =
         selectedYear === 'all' ||
         (selectedYear === '2024' && year === '2024') ||
@@ -67,9 +183,6 @@ export default function MoviesPage() {
     return list;
   }, [filteredMovies, sortBy]);
 
-  const totalPages = Math.ceil(sortedMovies.length / pageSize) || 1;
-  const paginatedMovies = sortedMovies.slice(0, page * pageSize);
-
   return (
     <div className="min-h-screen py-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
       {/* Page Title */}
@@ -77,18 +190,19 @@ export default function MoviesPage() {
         <div>
           <div className="flex items-center gap-2 text-kinopurple-primary text-xs font-bold uppercase tracking-wider mb-1">
             <Film className="h-4 w-4" />
-            <span>Katalog</span>
+            <span>Katalog • Jonli TMDB Baza</span>
           </div>
           <h1 className="font-heading text-3xl sm:text-4xl font-black text-white tracking-tight">
             Filmlar Katalogi
           </h1>
           <p className="text-sm text-kinotext-muted mt-1">
-            Dunyo kinematografiyasining eng sara durdonalari, premyeralar va reytingli filmlar
+            Dunyo kinematografiyasining eng sara durdonalari, haftalik premyeralar va reytingli filmlar
           </p>
         </div>
 
-        <div className="text-xs text-kinotext-muted font-medium bg-kinodark-surface/60 px-3 py-1.5 rounded-xl border border-kinodark-border self-start">
-          Topilgan filmlar: <span className="font-bold text-white">{sortedMovies.length}</span> ta
+        <div className="flex items-center gap-2 text-xs text-kinotext-muted font-medium bg-kinodark-surface/60 px-3.5 py-2 rounded-xl border border-kinodark-border self-start">
+          <Sparkles className="h-3.5 w-3.5 text-kinopurple-secondary" />
+          <span>Mavjud filmlar: <strong className="text-white font-bold">{sortedMovies.length}</strong> ta</span>
         </div>
       </div>
 
@@ -101,10 +215,7 @@ export default function MoviesPage() {
             <input
               type="text"
               value={search}
-              onChange={(e) => {
-                setSearch(e.target.value);
-                setPage(1);
-              }}
+              onChange={(e) => setSearch(e.target.value)}
               placeholder="Film nomi yoki kalit so'z bo'yicha qidirish..."
               className="w-full rounded-xl border border-kinodark-border bg-kinodark-surface py-2.5 pl-10 pr-4 text-sm text-kinotext-main placeholder-kinotext-muted/60 focus:border-kinopurple-primary focus:outline-none"
             />
@@ -114,10 +225,7 @@ export default function MoviesPage() {
           <div className="md:col-span-2">
             <select
               value={selectedYear}
-              onChange={(e) => {
-                setSelectedYear(e.target.value);
-                setPage(1);
-              }}
+              onChange={(e) => setSelectedYear(e.target.value)}
               className="w-full rounded-xl border border-kinodark-border bg-kinodark-surface py-2.5 px-3 text-sm text-kinotext-main focus:border-kinopurple-primary focus:outline-none"
             >
               <option value="all">Barcha yillar</option>
@@ -133,10 +241,7 @@ export default function MoviesPage() {
           <div className="md:col-span-2">
             <select
               value={minRating}
-              onChange={(e) => {
-                setMinRating(Number(e.target.value));
-                setPage(1);
-              }}
+              onChange={(e) => setMinRating(Number(e.target.value))}
               className="w-full rounded-xl border border-kinodark-border bg-kinodark-surface py-2.5 px-3 text-sm text-kinotext-main focus:border-kinopurple-primary focus:outline-none"
             >
               <option value={0}>Barcha reytinglar</option>
@@ -166,10 +271,7 @@ export default function MoviesPage() {
         <div className="pt-2 border-t border-kinodark-border/60">
           <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-1">
             <button
-              onClick={() => {
-                setSelectedGenre('all');
-                setPage(1);
-              }}
+              onClick={() => setSelectedGenre('all')}
               className={`rounded-xl px-3 py-1.5 text-xs font-semibold whitespace-nowrap transition ${
                 selectedGenre === 'all'
                   ? 'bg-kinopurple-primary text-white shadow-glow-purple'
@@ -181,10 +283,7 @@ export default function MoviesPage() {
             {GENRES.map((g) => (
               <button
                 key={g.id}
-                onClick={() => {
-                  setSelectedGenre(g.uzName || g.name);
-                  setPage(1);
-                }}
+                onClick={() => setSelectedGenre(g.uzName || g.name)}
                 className={`rounded-xl px-3 py-1.5 text-xs font-semibold whitespace-nowrap transition ${
                   selectedGenre === (g.uzName || g.name)
                     ? 'bg-kinopurple-primary text-white shadow-glow-purple'
@@ -199,11 +298,16 @@ export default function MoviesPage() {
       </div>
 
       {/* Movies Grid */}
-      {paginatedMovies.length > 0 ? (
+      {sortedMovies.length > 0 ? (
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-6">
-          {paginatedMovies.map((movie) => (
+          {sortedMovies.map((movie) => (
             <MovieCard key={movie.id} movie={movie} />
           ))}
+        </div>
+      ) : isInitialLoading ? (
+        <div className="flex flex-col items-center justify-center p-16 text-center">
+          <Loader2 className="h-8 w-8 text-kinopurple-primary animate-spin mb-3" />
+          <p className="text-xs text-kinotext-muted">Kinolar bazadan yuklanmoqda...</p>
         </div>
       ) : (
         <div className="flex flex-col items-center justify-center rounded-2xl border border-kinodark-border bg-kinodark-card p-12 text-center">
@@ -226,17 +330,29 @@ export default function MoviesPage() {
         </div>
       )}
 
-      {/* Pagination / Load More Button */}
-      {paginatedMovies.length < sortedMovies.length && (
-        <div className="mt-12 text-center">
-          <button
-            onClick={() => setPage((prev) => prev + 1)}
-            className="rounded-2xl border border-kinopurple-primary/40 bg-kinopurple-primary/10 px-8 py-3 text-sm font-bold text-kinopurple-secondary hover:bg-kinopurple-primary/20 transition"
-          >
-            Yana ko'proq yuklash ({sortedMovies.length - paginatedMovies.length} ta qoldi)
-          </button>
-        </div>
-      )}
+      {/* Infinite Load More Button */}
+      <div className="mt-12 text-center">
+        <button
+          onClick={handleLoadMore}
+          disabled={isLoadingMore}
+          className="inline-flex items-center gap-2 rounded-2xl border border-kinopurple-primary/40 bg-kinopurple-primary/10 px-8 py-3.5 text-sm font-bold text-kinopurple-secondary hover:bg-kinopurple-primary/20 hover:scale-105 active:scale-95 transition disabled:opacity-50 shadow-lg shadow-kinopurple-primary/10"
+        >
+          {isLoadingMore ? (
+            <>
+              <Loader2 className="h-4 w-4 animate-spin" />
+              <span>Yangi filmlar yuklanmoqda...</span>
+            </>
+          ) : (
+            <>
+              <RefreshCw className="h-4 w-4" />
+              <span>Yana ko'proq kinolarni yuklash</span>
+            </>
+          )}
+        </button>
+        <p className="text-[11px] text-kinotext-muted mt-2">
+          TMDB jahon kinolar bazasi bilan avtomatik bog'langan — har hafta yangi kinolar qo'shilib boradi
+        </p>
+      </div>
     </div>
   );
 }

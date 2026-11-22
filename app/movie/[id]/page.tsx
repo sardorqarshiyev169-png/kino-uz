@@ -321,7 +321,6 @@ export default function MovieDetailsPage() {
                     className="absolute inset-0 h-full w-full border-0"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowFullScreen
-                    sandbox="allow-forms allow-scripts allow-same-origin allow-presentation"
                   />
                 </div>
 

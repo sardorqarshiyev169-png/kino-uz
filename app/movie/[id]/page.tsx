@@ -62,12 +62,23 @@ export default function MovieDetailsPage() {
     }
 
     async function loadTmdbMovie() {
-      const data = await fetchFromTMDB(`/movie/${movieId}`);
-      if (data && data.id) {
-        const formatted = formatTmdbItem(data);
-        setMovie(formatted);
-        recordView(formatted);
-      } else {
+      try {
+        let data = await fetchFromTMDB(`/movie/${movieId}`);
+        let isTv = false;
+        if (!data || !data.id) {
+          data = await fetchFromTMDB(`/tv/${movieId}`);
+          if (data && data.id) {
+            isTv = true;
+          }
+        }
+        if (data && data.id) {
+          const formatted = formatTmdbItem(data, isTv ? 'tv' : 'movie');
+          setMovie(formatted);
+          recordView(formatted);
+        } else {
+          setMovie(INITIAL_MOVIES[0]);
+        }
+      } catch (err) {
         setMovie(INITIAL_MOVIES[0]);
       }
     }

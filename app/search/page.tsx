@@ -3,14 +3,17 @@
 import React, { useState, useEffect, useMemo, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import MovieCard from '@/components/MovieCard';
-import { INITIAL_MOVIES } from '@/lib/tmdb';
-import { Search, Film, Tv, Flame, User, Sparkles } from 'lucide-react';
+import { INITIAL_MOVIES, fetchFromTMDB, formatTmdbItem } from '@/lib/tmdb';
+import { Movie } from '@/lib/types';
+import { Search, Film, Tv, Flame, User, Sparkles, Loader2 } from 'lucide-react';
 
 function SearchContent() {
   const searchParams = useSearchParams();
   const initialQuery = searchParams.get('q') || '';
   const [query, setQuery] = useState(initialQuery);
   const [activeTab, setActiveTab] = useState<'all' | 'movie' | 'tv' | 'anime' | 'actor'>('all');
+  const [tmdbResults, setTmdbResults] = useState<Movie[]>([]);
+  const [isSearching, setIsSearching] = useState(false);
 
   useEffect(() => {
     if (initialQuery) {
@@ -18,11 +21,64 @@ function SearchContent() {
     }
   }, [initialQuery]);
 
+  useEffect(() => {
+    const q = query.trim();
+    if (q.length < 2) {
+      setTmdbResults([]);
+      return;
+    }
+
+    const timer = setTimeout(async () => {
+      setIsSearching(true);
+      try {
+        let searchTerm = q;
+        const lower = q.toLowerCase();
+        if (lower.includes('garri') || lower.includes('garry') || lower.includes('poter')) {
+          searchTerm = 'Harry Potter';
+        } else if (lower.includes('forsaj')) {
+          searchTerm = 'Fast and Furious';
+        } else if (lower.includes('qasoskorlar')) {
+          searchTerm = 'Avengers';
+        } else if (lower.includes('orgimchak') || lower.includes("o'rgimchak")) {
+          searchTerm = 'Spider-Man';
+        } else if (lower.includes('taxtlar')) {
+          searchTerm = 'Game of Thrones';
+        } else if (lower.includes('uzuklar')) {
+          searchTerm = 'Lord of the Rings';
+        }
+
+        const data = await fetchFromTMDB('/search/multi', { query: searchTerm });
+        if (data && Array.isArray(data.results)) {
+          let items = (data.results as any[])
+            .filter((x) => (x.media_type === 'movie' || x.media_type === 'tv') && x.poster_path);
+
+          if (searchTerm === 'Harry Potter') {
+            items = items.filter((x) => (x.vote_count || 0) > 100);
+            items.sort((a, b) => (a.release_date || a.first_air_date || '').localeCompare(b.release_date || b.first_air_date || ''));
+          } else {
+            items.sort((a, b) => ((b.vote_count || 0) * 2 + (b.popularity || 0)) - ((a.vote_count || 0) * 2 + (a.popularity || 0)));
+          }
+
+          const formatted = items.slice(0, 20).map((item) =>
+            formatTmdbItem(item, item.media_type === 'tv' ? 'tv' : 'movie')
+          );
+          setTmdbResults(formatted);
+        }
+      } catch (e) {
+        console.warn('Search fetch error:', e);
+      } finally {
+        setIsSearching(false);
+      }
+    }, 350);
+
+    return () => clearTimeout(timer);
+  }, [query]);
+
   const searchResults = useMemo(() => {
     const q = query.toLowerCase().trim();
     if (!q) return [];
 
-    return INITIAL_MOVIES.filter((movie) => {
+    const localMatches = INITIAL_MOVIES.filter((movie) => {
       const matchesTitle =
         movie.title.toLowerCase().includes(q) ||
         (movie.original_title && movie.original_title.toLowerCase().includes(q));
@@ -39,18 +95,31 @@ function SearchContent() {
       const matchesActor =
         movie.cast && movie.cast.some((c) => c.name.toLowerCase().includes(q));
 
-      const matchesSearch = matchesTitle || matchesOverview || matchesGenre || matchesActor;
+      return matchesTitle || matchesOverview || matchesGenre || matchesActor;
+    });
 
-      if (!matchesSearch) return false;
+    // Combine local matches and TMDB matches avoiding duplicate IDs
+    const combined: Movie[] = [...localMatches];
+    const seenIds = new Set<string>(localMatches.map((m) => String(m.id)));
 
+    for (const m of tmdbResults) {
+      const sId = String(m.id);
+      if (!seenIds.has(sId)) {
+        seenIds.add(sId);
+        combined.push(m);
+      }
+    }
+
+    return combined.filter((movie) => {
       if (activeTab === 'movie') return movie.media_type === 'movie';
       if (activeTab === 'tv') return movie.media_type === 'tv';
       if (activeTab === 'anime') return movie.media_type === 'anime';
-      if (activeTab === 'actor') return matchesActor;
-
+      if (activeTab === 'actor') {
+        return movie.cast && movie.cast.some((c) => c.name.toLowerCase().includes(q));
+      }
       return true;
     });
-  }, [query, activeTab]);
+  }, [query, activeTab, tmdbResults]);
 
   return (
     <div className="min-h-screen py-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
@@ -65,12 +134,16 @@ function SearchContent() {
 
         {/* Big Search Input */}
         <div className="relative mt-6 max-w-2xl">
-          <Search className="absolute left-4 top-3.5 h-5 w-5 text-kinotext-muted" />
+          {isSearching ? (
+            <Loader2 className="absolute left-4 top-3.5 h-5 w-5 text-kinopurple-primary animate-spin" />
+          ) : (
+            <Search className="absolute left-4 top-3.5 h-5 w-5 text-kinotext-muted" />
+          )}
           <input
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Qidiruv so'zini kiriting (masalan: Nolan, Interstellar, Batman, Anime)..."
+            placeholder="Qidiruv so'zini kiriting (masalan: Garri Potter, Forsaj, Nolan, Batman, Anime)..."
             className="w-full rounded-2xl border border-kinodark-border bg-kinodark-card py-3.5 pl-12 pr-4 text-sm text-kinotext-main placeholder-kinotext-muted/60 focus:border-kinopurple-primary focus:outline-none focus:ring-1 focus:ring-kinopurple-primary shadow-xl"
             autoFocus
           />

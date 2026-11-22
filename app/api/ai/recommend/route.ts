@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
 
     // Gracefully fallback to built-in Uzbek semantic movie recommendation engine
     if (!result) {
-      result = processUzbekMovieQuery(prompt, history || []);
+      result = await processUzbekMovieQuery(prompt, history || []);
     }
 
     return NextResponse.json(result);

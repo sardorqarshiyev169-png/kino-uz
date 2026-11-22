@@ -135,26 +135,16 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
         <div className="mt-6 border-t border-kinodark-border pt-5">
           <p className="text-center text-xs text-kinotext-muted mb-3">
-            Tezkor sinov (Demo hisoblar):
+            Tezkor sinov:
           </p>
-          <div className="grid grid-cols-2 gap-2.5">
-            <button
-              type="button"
-              onClick={() => handleDemoLogin('user')}
-              className="flex items-center justify-center gap-1.5 rounded-xl border border-kinodark-border bg-kinodark-surface py-2 text-xs font-medium text-kinotext-main hover:border-kinopurple-primary/50 transition"
-            >
-              <User className="h-3.5 w-3.5 text-kinopurple-secondary" />
-              Foydalanuvchi
-            </button>
-            <button
-              type="button"
-              onClick={() => handleDemoLogin('admin')}
-              className="flex items-center justify-center gap-1.5 rounded-xl border border-kinopurple-primary/40 bg-kinopurple-primary/10 py-2 text-xs font-medium text-kinopurple-secondary hover:bg-kinopurple-primary/20 transition"
-            >
-              <ShieldCheck className="h-3.5 w-3.5 text-kinopurple-primary" />
-              Admin paneli
-            </button>
-          </div>
+          <button
+            type="button"
+            onClick={() => handleDemoLogin('user')}
+            className="w-full flex items-center justify-center gap-1.5 rounded-xl border border-kinodark-border bg-kinodark-surface py-2 text-xs font-medium text-kinotext-main hover:border-kinopurple-primary/50 transition"
+          >
+            <User className="h-3.5 w-3.5 text-kinopurple-secondary" />
+            Mehmon sifatida kirish
+          </button>
         </div>
 
         <div className="mt-5 text-center text-xs text-kinotext-muted">

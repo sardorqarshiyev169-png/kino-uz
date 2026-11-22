@@ -34,6 +34,8 @@ export default function MovieDetailsPage() {
   const [movie, setMovie] = useState<Movie | null>(() => getMovieById(movieId) || null);
   const [isPlayingOnline, setIsPlayingOnline] = useState(false);
   const [selectedServer, setSelectedServer] = useState<'server1' | 'server2' | 'server3'>('server1');
+  const [selectedSeason, setSelectedSeason] = useState(1);
+  const [selectedEpisode, setSelectedEpisode] = useState(1);
 
   const {
     openTrailer,
@@ -99,19 +101,23 @@ export default function MovieDetailsPage() {
     setTimeout(() => setReviewSubmitted(false), 3000);
   };
 
-  const isTvShow = movie.media_type === 'tv';
+  const isTvShow = movie.media_type === 'tv' || movie.media_type === 'anime';
 
   // Real full movie stream URLs by TMDB ID
   const getVideoSrc = () => {
     if (selectedServer === 'server1') {
-      return `https://multiembed.mov/?video_id=${movie.id}&tmdb=1`;
+      return isTvShow
+        ? `https://multiembed.mov/?video_id=${movie.id}&tmdb=1&s=${selectedSeason}&e=${selectedEpisode}`
+        : `https://multiembed.mov/?video_id=${movie.id}&tmdb=1`;
     }
     if (selectedServer === 'server2') {
       return isTvShow
-        ? `https://embed.su/embed/tv/${movie.id}/1/1`
+        ? `https://embed.su/embed/tv/${movie.id}/${selectedSeason}/${selectedEpisode}`
         : `https://embed.su/embed/movie/${movie.id}`;
     }
-    return `https://multiembed.mov/?video_id=${movie.id}&tmdb=1`;
+    return isTvShow
+      ? `https://vidlink.pro/tv/${movie.id}/${selectedSeason}/${selectedEpisode}`
+      : `https://vidlink.pro/movie/${movie.id}`;
   };
 
   return (
@@ -281,8 +287,34 @@ export default function MovieDetailsPage() {
                     </div>
                   </div>
 
-                  {/* Server Buttons */}
+                  {/* Server & Season Buttons */}
                   <div className="flex items-center gap-1.5 self-start sm:self-auto flex-wrap">
+                    {isTvShow && (
+                      <div className="flex items-center gap-1.5 bg-kinodark-surface p-1 rounded-xl border border-kinodark-border mr-1">
+                        <select
+                          value={selectedSeason}
+                          onChange={(e) => setSelectedSeason(Number(e.target.value))}
+                          className="bg-kinodark-card text-white text-xs font-semibold rounded-lg px-2 py-1 border border-kinodark-border focus:outline-none focus:border-kinopurple-primary"
+                        >
+                          {[1, 2, 3, 4, 5, 6, 7, 8].map((s) => (
+                            <option key={s} value={s}>
+                              {s}-Mavsum
+                            </option>
+                          ))}
+                        </select>
+                        <select
+                          value={selectedEpisode}
+                          onChange={(e) => setSelectedEpisode(Number(e.target.value))}
+                          className="bg-kinodark-card text-white text-xs font-semibold rounded-lg px-2 py-1 border border-kinodark-border focus:outline-none focus:border-kinopurple-primary"
+                        >
+                          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20].map((ep) => (
+                            <option key={ep} value={ep}>
+                              {ep}-Qism
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    )}
                     <button
                       onClick={() => setSelectedServer('server1')}
                       className={`rounded-xl px-3.5 py-1.5 text-xs font-bold transition ${
@@ -291,7 +323,7 @@ export default function MovieDetailsPage() {
                           : 'bg-kinodark-surface text-kinotext-muted hover:text-white'
                       }`}
                     >
-                      Asosiy HD Pleyer
+                      Asosiy HD
                     </button>
                     <button
                       onClick={() => setSelectedServer('server2')}
@@ -301,7 +333,7 @@ export default function MovieDetailsPage() {
                           : 'bg-kinodark-surface text-kinotext-muted hover:text-white'
                       }`}
                     >
-                      Zaxira Pleyer
+                      Zaxira
                     </button>
                     <button
                       onClick={() => setIsPlayingOnline(false)}
@@ -315,7 +347,7 @@ export default function MovieDetailsPage() {
                 {/* Real Movie Video Frame */}
                 <div className="relative aspect-video w-full rounded-2xl overflow-hidden bg-black shadow-inner border border-kinodark-border">
                   <iframe
-                    key={selectedServer}
+                    key={`${selectedServer}-${selectedSeason}-${selectedEpisode}`}
                     src={getVideoSrc()}
                     title={movie.title}
                     className="absolute inset-0 h-full w-full border-0"

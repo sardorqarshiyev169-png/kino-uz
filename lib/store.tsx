@@ -25,52 +25,31 @@ interface StoreContextType {
   featuredMovieId: string;
   setFeaturedMovieId: (id: string) => void;
   adminStats: AdminStats;
+  recordAiQuery: () => void;
   language: 'uz' | 'ru' | 'en';
   setLanguage: (lang: 'uz' | 'ru' | 'en') => void;
 }
 
 const DEFAULT_USER: UserProfile = {
-  id: 'usr-1',
-  username: 'Azizbek',
-  email: 'azizbek@kino.uz',
+  id: 'usr-owner',
+  username: 'Sardor Qarshiyev (Asoschi)',
+  email: 'sardorqarshiyev169@gmail.com',
   avatar_url: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=256&q=80',
   role: 'admin',
-  created_at: '2024-01-15T10:00:00Z',
-  favorite_genres: ['Ilmiy-fantastika', 'Jangari', 'Anime'],
+  created_at: '2024-11-23T00:00:00Z',
+  favorite_genres: ['Ilmiy-fantastika', 'Jangari', 'Tarixiy'],
 };
 
 const INITIAL_REVIEWS: Review[] = [
   {
     id: 'rev-1',
-    user_id: 'usr-demo-1',
-    username: 'Jasur_K',
-    avatar_url: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=128&q=80',
+    user_id: 'usr-owner',
+    username: 'Sardor Qarshiyev (Asoschi)',
+    avatar_url: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=128&q=80',
     movie_id: '157336',
     rating: 10,
-    comment: 'Interstellar — kinosan\'atining eng cho\'qqisi! Saundtreki va qora tuynuk tasvirlari shunchaki hayratlanarli darajada mukammal.',
-    created_at: '2024-10-12T14:20:00Z',
-    status: 'approved',
-  },
-  {
-    id: 'rev-2',
-    user_id: 'usr-demo-2',
-    username: 'Madina_Art',
-    avatar_url: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=128&q=80',
-    movie_id: '693134',
-    rating: 9,
-    comment: 'Dyuna 2 filmi har bir kadrida estetik zavq beradi. Timoti va Zendayaning ijrosi juda ishonarli chiqqan.',
-    created_at: '2024-11-01T09:15:00Z',
-    status: 'approved',
-  },
-  {
-    id: 'rev-3',
-    user_id: 'usr-demo-3',
-    username: 'Bobur_Cinema',
-    avatar_url: 'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?auto=format&fit=crop&w=128&q=80',
-    movie_id: '27205',
-    rating: 10,
-    comment: 'Inception filmini 3 marta ko\'rdim, har safar yangi qirralarini kashf qilaman. Leonardo DiCaprio roli juda zo\'r.',
-    created_at: '2024-11-18T18:40:00Z',
+    comment: 'Kino uz platformasining birinchi rasmiy sharhi. Sayt muvaffaqiyatli ishga tushirildi!',
+    created_at: '2024-11-23T02:00:00Z',
     status: 'approved',
   },
 ];
@@ -101,6 +80,8 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
   const [activeTrailerKey, setActiveTrailerKey] = useState<string | null>(null);
   const [featuredMovieId, setFeaturedMovieId] = useState<string>('157336');
   const [language, setLanguage] = useState<'uz' | 'ru' | 'en'>('uz');
+  const [realViewsCount, setRealViewsCount] = useState<number>(18);
+  const [realAiQueriesCount, setRealAiQueriesCount] = useState<number>(6);
 
   // Load persistent store on browser mount
   useEffect(() => {
@@ -119,6 +100,12 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
 
       const savedHistory = localStorage.getItem('kinouz_history');
       if (savedHistory) setViewingHistory(JSON.parse(savedHistory));
+
+      const savedViews = localStorage.getItem('kinouz_real_views_count');
+      if (savedViews) setRealViewsCount(Number(savedViews));
+
+      const savedAiQueries = localStorage.getItem('kinouz_real_ai_queries_count');
+      if (savedAiQueries) setRealAiQueriesCount(Number(savedAiQueries));
     } catch (e) {
       console.warn('LocalStorage error:', e);
     }
@@ -181,6 +168,14 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
 
   const recordView = (movie: Movie) => {
     const sId = String(movie.id);
+    setRealViewsCount((prev) => {
+      const next = prev + 1;
+      try {
+        localStorage.setItem('kinouz_real_views_count', String(next));
+      } catch {}
+      return next;
+    });
+
     setViewingHistory((prev) => {
       const filtered = prev.filter((item) => item.movieId !== sId);
       const updated = [
@@ -199,11 +194,21 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
     });
   };
 
+  const recordAiQuery = () => {
+    setRealAiQueriesCount((prev) => {
+      const next = prev + 1;
+      try {
+        localStorage.setItem('kinouz_real_ai_queries_count', String(next));
+      } catch {}
+      return next;
+    });
+  };
+
   const addReview = (movieId: string | number, rating: number, comment: string) => {
     const newRev: Review = {
       id: 'rev-' + Date.now(),
-      user_id: user?.id || 'guest',
-      username: user?.username || 'Kino Muxlisi',
+      user_id: user?.id || 'usr-owner',
+      username: user?.username || 'Sardor Qarshiyev',
       avatar_url: user?.avatar_url,
       movie_id: movieId,
       rating,
@@ -234,12 +239,12 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
   const closeTrailer = () => setActiveTrailerKey(null);
 
   const adminStats: AdminStats = {
-    totalUsers: 14280,
-    activeUsersToday: 1840,
-    totalMovies: INITIAL_MOVIES.length + 840,
-    totalViews: 248900,
-    totalReviews: reviews.length + 3120,
-    aiQueriesCount: 8940,
+    totalUsers: 1,
+    activeUsersToday: 1,
+    totalMovies: INITIAL_MOVIES.length,
+    totalViews: realViewsCount,
+    totalReviews: reviews.length,
+    aiQueriesCount: realAiQueriesCount,
     trendingCount: INITIAL_MOVIES.filter((m) => m.isTrending).length,
   };
 
@@ -257,6 +262,7 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
         isWatchlist,
         viewingHistory,
         recordView,
+        recordAiQuery,
         reviews,
         addReview,
         deleteReview,

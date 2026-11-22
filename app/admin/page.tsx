@@ -22,6 +22,7 @@ import {
   Lock,
   LogOut,
   ShieldAlert,
+  ShieldCheck,
 } from 'lucide-react';
 import Link from 'next/link';
 
@@ -100,12 +101,9 @@ export default function AdminDashboardPage() {
     setTimeout(() => setPasswordChangeSuccess(false), 3000);
   };
 
-  // Simulated Admin Users List
+  // Real Admin Users List
   const [usersList, setUsersList] = useState([
-    { id: '1', username: 'Sardor Qarshiyev (Asoschi)', email: 'sardorqarshiyev169@gmail.com', role: 'Owner/Admin', status: 'active', registered: '2024-01-10' },
-    { id: '2', username: 'Jasur_Cinema', email: 'jasur@mail.uz', role: 'user', status: 'active', registered: '2024-02-14' },
-    { id: '3', username: 'Dilnoza_Art', email: 'dilnoza@gmail.com', role: 'user', status: 'active', registered: '2024-03-01' },
-    { id: '4', username: 'Sherzod_Tashkent', email: 'sherzod@yahoo.com', role: 'moderator', status: 'active', registered: '2024-04-12' },
+    { id: '1', username: 'Sardor Qarshiyev (Asoschi)', email: 'sardorqarshiyev169@gmail.com', role: 'Owner/Admin', status: 'Faol', registered: 'Bugun' },
   ]);
 
   // AI & TMDB Config state
@@ -282,7 +280,7 @@ export default function AdminDashboardPage() {
                 {adminStats.totalUsers.toLocaleString()}
               </div>
               <div className="text-[11px] text-emerald-400 mt-1 flex items-center gap-1">
-                <TrendingUp className="h-3 w-3" /> +12.4% yangi tashriflar
+                <ShieldCheck className="h-3 w-3" /> Asoschi (Sardor Qarshiyev)
               </div>
             </div>
 
@@ -295,20 +293,20 @@ export default function AdminDashboardPage() {
                 {adminStats.totalViews.toLocaleString()}
               </div>
               <div className="text-[11px] text-emerald-400 mt-1 flex items-center gap-1">
-                <TrendingUp className="h-3 w-3" /> Bugun: 1,840 faol tomoshabin
+                <TrendingUp className="h-3 w-3" /> Haqiqiy ko'rilgan kinolar
               </div>
             </div>
 
             <div className="rounded-2xl border border-kinodark-border bg-kinodark-card p-5 shadow-card">
               <div className="flex items-center justify-between text-kinotext-muted mb-3">
-                <span className="text-xs font-medium">TMDB Indekslangan Filmlar</span>
+                <span className="text-xs font-medium">Bosh Katalogdagi Kinolar</span>
                 <Film className="h-5 w-5 text-amber-400" />
               </div>
               <div className="font-heading text-2xl font-black text-white">
                 {adminStats.totalMovies.toLocaleString()}
               </div>
               <div className="text-[11px] text-emerald-400 mt-1">
-                API Kalit faol va ulangan
+                TMDB Jonli API ulangan
               </div>
             </div>
 
@@ -321,7 +319,7 @@ export default function AdminDashboardPage() {
                 {adminStats.aiQueriesCount.toLocaleString()}
               </div>
               <div className="text-[11px] text-kinopurple-secondary mt-1">
-                98.6% aniq natijalar
+                Haqiqiy foydalanuvchi so'rovlari
               </div>
             </div>
           </div>

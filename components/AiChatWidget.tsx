@@ -31,7 +31,7 @@ const SUGGESTED_PROMPTS = [
 ];
 
 export const AiChatWidget: React.FC<AiChatWidgetProps> = ({ embedded = false }) => {
-  const { openTrailer } = useStore();
+  const { openTrailer, recordAiQuery } = useStore();
   const [messages, setMessages] = useState<AiMessage[]>([
     {
       id: 'welcome',
@@ -92,6 +92,7 @@ export const AiChatWidget: React.FC<AiChatWidgetProps> = ({ embedded = false }) 
         created_at: new Date().toISOString(),
       };
       setMessages((prev) => [...prev, botMsg]);
+      recordAiQuery();
     } catch (err) {
       console.error(err);
       const fallbackMsg: AiMessage = {

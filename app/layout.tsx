@@ -6,9 +6,33 @@ import Footer from '@/components/Footer';
 import TrailerModal from '@/components/TrailerModal';
 
 export const metadata: Metadata = {
-  title: 'Kino uz — Discover. Explore. Experience.',
+  title: 'Kino uz — Eng sara filmlar, seriallar va AI kino maslahatchisi',
   description:
-    'O\'zbekistonning zamonaviy va aqlli kino, serial va anime kashfiyot platformasi. Rasmiy treylerlar, AI yordamchi va qonuniy ko\'rish havolalari.',
+    "O'zbekistonning zamonaviy va aqlli kino, serial va anime platformasi. To'liq HD filmlar, AI tavsiyalar, rasmiy treylerlar va premyeralar.",
+  keywords: [
+    'kino uz',
+    'kinouz',
+    'kino uzbek',
+    'uzbekcha kinolar',
+    'yangi kinolar 2024',
+    'tarjima kinolar',
+    'seriallar',
+    'anime uzbekcha',
+    'hd kinolar',
+    'kino tomosha qilish',
+    'filmlar',
+    'ai kino',
+  ],
+  authors: [{ name: 'Sardor Qarshiyev' }],
+  creator: 'Sardor Qarshiyev',
+  openGraph: {
+    type: 'website',
+    locale: 'uz_UZ',
+    url: 'https://kino-uz-rho.vercel.app',
+    title: 'Kino uz — Eng sara filmlar va seriallar platformasi',
+    description: "To'liq HD kinolar, yangi premyeralar va AI kino maslahatchisi.",
+    siteName: 'Kino uz',
+  },
   icons: {
     icon: '/favicon.svg',
   },

@@ -94,28 +94,6 @@ export const KNOWN_UZBEK_VIDEO_KEYS: Record<string, string> = {
 
   // Janob hech kim
   'uz-17': 'ouCLHQHEXH0',
-
-  // Tarjima kinolar:
-  '9799': 'AA_LxIxqURc', // Forsaj 1 (O'zbek tilida)
-  'tarjima-forsaj': 'AA_LxIxqURc',
-
-  '671': 'xmv5V7DnrRA', // Garri Potter 1 (O'zbek tilida)
-  'tarjima-garri-potter': 'xmv5V7DnrRA',
-
-  '597': 'kagcFRl10ZI', // Titanik (O'zbek tilida)
-  'tarjima-titanik': 'kagcFRl10ZI',
-
-  '19995': 'lgKgJ17ntFQ', // Avatar (O'zbek tilida)
-  'tarjima-avatar': 'lgKgJ17ntFQ',
-
-  '101': 'wJdCgTHGmhc', // Leon: Professional (O'zbek tilida)
-  'tarjima-leon': 'wJdCgTHGmhc',
-
-  '98': 'qFt_9EE8b8Y', // Gladiator (O'zbek tilida)
-  'tarjima-gladiator': 'qFt_9EE8b8Y',
-
-  '245891': '__CGR2DXFwE', // Jon Uik 1 (O'zbek tilida)
-  'tarjima-jon-uik': '__CGR2DXFwE',
 };
 
 // Haqiqiy, tekshirilgan va sayt pleyerida 100% ochiladigan kinolar ro'yxati
@@ -501,7 +479,6 @@ export const UZBEK_MOVIES: Movie[] = [
     isUzbek: true,
     isTarjima: true,
     tagline: "O'zbek tilida: Bir lahzalik tezlik, cheksiz ozodlik!",
-    trailer_key: 'AA_LxIxqURc', // Forsaj 1 Uzbek tilida to'liq film
     where_to_watch: UZBEK_OFFICIAL_PROVIDERS,
   },
   {
@@ -521,7 +498,6 @@ export const UZBEK_MOVIES: Movie[] = [
     isUzbek: true,
     isTarjima: true,
     tagline: "O'zbek tilida: Sehrli olamga xush kelibsiz!",
-    trailer_key: 'xmv5V7DnrRA', // Garri Potter 1 Uzbek tilida to'liq film
     where_to_watch: UZBEK_OFFICIAL_PROVIDERS,
   },
   {
@@ -541,7 +517,6 @@ export const UZBEK_MOVIES: Movie[] = [
     isUzbek: true,
     isTarjima: true,
     tagline: "O'zbek tilida: Inson qalbi ummondan ham teranroq",
-    trailer_key: 'kagcFRl10ZI', // Titanik Uzbek tilida to'liq film
     where_to_watch: UZBEK_OFFICIAL_PROVIDERS,
   },
   {
@@ -561,7 +536,6 @@ export const UZBEK_MOVIES: Movie[] = [
     isUzbek: true,
     isTarjima: true,
     tagline: "O'zbek tilida: Men seni ko'ryapman...",
-    trailer_key: 'lgKgJ17ntFQ', // Avatar Uzbek tilida
     where_to_watch: UZBEK_OFFICIAL_PROVIDERS,
   },
   {
@@ -581,7 +555,6 @@ export const UZBEK_MOVIES: Movie[] = [
     isUzbek: true,
     isTarjima: true,
     tagline: "O'zbek tilida: Hech qachon ayollar va bolalarga tegmang",
-    trailer_key: 'wJdCgTHGmhc', // Leon Uzbek tilida
     where_to_watch: UZBEK_OFFICIAL_PROVIDERS,
   },
   {
@@ -601,7 +574,6 @@ export const UZBEK_MOVIES: Movie[] = [
     isUzbek: true,
     isTarjima: true,
     tagline: "O'zbek tilida: Bu hayotdagi amallarimiz mangu aks sado beradi",
-    trailer_key: 'qFt_9EE8b8Y', // Gladiator Uzbek tilida
     where_to_watch: UZBEK_OFFICIAL_PROVIDERS,
   },
   {
@@ -621,7 +593,6 @@ export const UZBEK_MOVIES: Movie[] = [
     isUzbek: true,
     isTarjima: true,
     tagline: "O'zbek tilida: U shunchaki odam emas, u — Baba Yaga!",
-    trailer_key: '__CGR2DXFwE', // Jon Uik Uzbek tilida
     where_to_watch: UZBEK_OFFICIAL_PROVIDERS,
   },
   {

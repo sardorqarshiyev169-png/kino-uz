@@ -121,20 +121,24 @@ export default function MovieDetailsPage() {
 
   const isTvShow = movie.media_type === 'tv' || movie.media_type === 'anime';
 
-  // Real full movie stream URLs by TMDB ID or verified YouTube embed for Uzbek & Tarjima films
+  // Real full movie stream URLs: National Uzbek cinema uses verified Full HD feeds; Foreign & Tarjima movies use high-speed multiembed cinema servers
   const getVideoSrc = () => {
-    const videoKey = movie.trailer_key || KNOWN_UZBEK_VIDEO_KEYS[String(movie.id)];
+    const isNationalUzbek = Boolean(movie.isUzbek && !movie.isTarjima);
+    const nationalKey = isNationalUzbek ? (movie.trailer_key || KNOWN_UZBEK_VIDEO_KEYS[String(movie.id)]) : undefined;
 
-    if ((movie.isUzbek || movie.isTarjima) && videoKey) {
+    // National Uzbek movies (Super Kelinchak, Shum bola, O'tkan kunlar, etc.)
+    if (nationalKey) {
       if (selectedServer === 'server1') {
-        return `https://www.youtube-nocookie.com/embed/${videoKey}?autoplay=1&rel=0`;
+        return `https://www.youtube-nocookie.com/embed/${nationalKey}?autoplay=1&rel=0`;
       }
       if (selectedServer === 'server2') {
-        return `https://www.youtube.com/embed/${videoKey}?autoplay=1`;
+        return `https://www.youtube.com/embed/${nationalKey}?autoplay=1`;
       }
       return `https://multiembed.mov/?video_id=${movie.id}&tmdb=1`;
     }
 
+    // Foreign & Tarjima Movies (Titanik, Forsaj, Garri Potter, Avatar, Interstellar, etc.)
+    // Full 2-3 hour movies stream from dedicated cinema servers:
     if (selectedServer === 'server1') {
       return isTvShow
         ? `https://multiembed.mov/?video_id=${movie.id}&tmdb=1&s=${selectedSeason}&e=${selectedEpisode}`
@@ -363,7 +367,17 @@ export default function MovieDetailsPage() {
                           : 'bg-kinodark-surface text-kinotext-muted hover:text-white'
                       }`}
                     >
-                      Zaxira
+                      Zaxira 1
+                    </button>
+                    <button
+                      onClick={() => setSelectedServer('server3')}
+                      className={`rounded-xl px-3 py-1.5 text-xs font-bold transition ${
+                        selectedServer === 'server3'
+                          ? 'bg-kinopurple-primary text-white shadow-glow-purple'
+                          : 'bg-kinodark-surface text-kinotext-muted hover:text-white'
+                      }`}
+                    >
+                      Zaxira 2
                     </button>
                     <button
                       onClick={() => setIsPlayingOnline(false)}

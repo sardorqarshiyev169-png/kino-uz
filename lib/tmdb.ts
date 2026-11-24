@@ -360,7 +360,11 @@ export async function fetchFromTMDB(endpoint: string, params: Record<string, str
 }
 
 export function getAllMovies(): Movie[] {
-  return INITIAL_MOVIES;
+  const map = new Map<string, Movie>();
+  for (const m of [...INITIAL_MOVIES, ...UZBEK_MOVIES]) {
+    map.set(String(m.id), m);
+  }
+  return Array.from(map.values());
 }
 
 export function getMovieById(id: string | number): Movie | undefined {

@@ -16,7 +16,7 @@ import {
   fetchFromTMDB,
   formatTmdbItem,
 } from '@/lib/tmdb';
-import { UZBEK_MOVIES } from '@/lib/uzbek-movies';
+import { UZBEK_MOVIES, fetchLiveUzbekMoviesFromTMDB } from '@/lib/uzbek-movies';
 import {
   Flame,
   Star,
@@ -39,6 +39,7 @@ export default function HomePage() {
   const [recent, setRecent] = useState(getRecentMovies);
   const [tvSeries, setTvSeries] = useState(getTVSeries);
   const [anime, setAnime] = useState(getAnimeList);
+  const [uzbekMovies, setUzbekMovies] = useState(UZBEK_MOVIES);
   const [heroMovies, setHeroMovies] = useState(() =>
     INITIAL_MOVIES.filter((m) => m.isFeatured || m.isTrending)
   );
@@ -109,6 +110,12 @@ export default function HomePage() {
             .slice(0, 16)
             .map((x: any) => formatTmdbItem(x, 'anime'));
           if (list.length > 0) setAnime(list);
+        }
+
+        // Live Uzbek films from TMDB
+        const liveUzbek = await fetchLiveUzbekMoviesFromTMDB();
+        if (liveUzbek && liveUzbek.length > 0) {
+          setUzbekMovies([...UZBEK_MOVIES, ...liveUzbek.slice(0, 10)]);
         }
       } catch (err) {
         console.warn('Failed to load weekly live movies:', err);

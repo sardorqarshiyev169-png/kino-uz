@@ -316,6 +316,9 @@ export function formatTmdbItem(item: any, defaultType: 'movie' | 'tv' | 'anime' 
     runtime: item.runtime || 115,
     genres: genres.length > 0 ? genres : ['Kino'],
     media_type: defaultType === 'anime' ? 'anime' : (isTV ? 'tv' : 'movie'),
+    isUzbek:
+      item.original_language === 'uz' ||
+      (Array.isArray(item.origin_country) && item.origin_country.includes('UZ')),
     where_to_watch: OFFICIAL_PROVIDERS,
     trailer_key: 'zSWdZVtXT7E', // Default high quality trailer fallback
   };

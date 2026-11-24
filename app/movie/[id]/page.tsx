@@ -73,6 +73,12 @@ export default function MovieDetailsPage() {
         }
         if (data && data.id) {
           const formatted = formatTmdbItem(data, isTv ? 'tv' : 'movie');
+          if (
+            data.original_language === 'uz' ||
+            (Array.isArray(data.origin_country) && data.origin_country.includes('UZ'))
+          ) {
+            formatted.isUzbek = true;
+          }
           setMovie(formatted);
           recordView(formatted);
         } else {
@@ -114,11 +120,27 @@ export default function MovieDetailsPage() {
 
   const isTvShow = movie.media_type === 'tv' || movie.media_type === 'anime';
 
-  // Real full movie stream URLs by TMDB ID or YouTube embed for Uzbek films
+  // Real full movie stream URLs by TMDB ID or verified YouTube embed for Uzbek films
   const getVideoSrc = () => {
-    if (movie.isUzbek && movie.trailer_key) {
-      return `https://www.youtube-nocookie.com/embed/${movie.trailer_key}?autoplay=1&rel=0`;
+    if (movie.isUzbek) {
+      if (movie.trailer_key) {
+        if (selectedServer === 'server1') {
+          return `https://www.youtube-nocookie.com/embed/${movie.trailer_key}?autoplay=1&rel=0`;
+        }
+        if (selectedServer === 'server2') {
+          return `https://www.youtube.com/embed/${movie.trailer_key}?autoplay=1`;
+        }
+        return `https://multiembed.mov/?video_id=${movie.id}&tmdb=1`;
+      }
+      if (selectedServer === 'server1') {
+        return `https://multiembed.mov/?video_id=${movie.id}&tmdb=1`;
+      }
+      if (selectedServer === 'server2') {
+        return `https://embed.su/embed/movie/${movie.id}`;
+      }
+      return `https://vidlink.pro/movie/${movie.id}`;
     }
+
     if (selectedServer === 'server1') {
       return isTvShow
         ? `https://multiembed.mov/?video_id=${movie.id}&tmdb=1&s=${selectedSeason}&e=${selectedEpisode}`
@@ -193,6 +215,24 @@ export default function MovieDetailsPage() {
                   <Film className="h-4 w-4 text-kinopurple-secondary" />
                   Treylerni ko'rish (YouTube)
                 </button>
+              )}
+
+              {movie.isUzbek && (
+                <a
+                  href={
+                    movie.trailer_key
+                      ? `https://www.youtube.com/watch?v=${movie.trailer_key}`
+                      : `https://www.youtube.com/results?search_query=${encodeURIComponent(
+                          movie.title + " o'zbek film to'liq"
+                        )}`
+                  }
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full flex items-center justify-center gap-2 rounded-xl border border-red-500/40 bg-red-600/15 py-2.5 text-xs font-semibold text-red-400 hover:bg-red-600/25 transition"
+                >
+                  <ExternalLink className="h-4 w-4" />
+                  YouTube Rasmiy Manbada Ko'rish
+                </a>
               )}
 
               <div className="grid grid-cols-2 gap-2">
@@ -337,7 +377,7 @@ export default function MovieDetailsPage() {
                           : 'bg-kinodark-surface text-kinotext-muted hover:text-white'
                       }`}
                     >
-                      Asosiy HD
+                      {movie.isUzbek ? "YouTube HD (Rasmiy)" : "Asosiy HD"}
                     </button>
                     <button
                       onClick={() => setSelectedServer('server2')}
@@ -349,6 +389,23 @@ export default function MovieDetailsPage() {
                     >
                       Zaxira
                     </button>
+                    {movie.isUzbek && (
+                      <a
+                        href={
+                          movie.trailer_key
+                            ? `https://www.youtube.com/watch?v=${movie.trailer_key}`
+                            : `https://www.youtube.com/results?search_query=${encodeURIComponent(
+                                movie.title + " o'zbek film to'liq"
+                              )}`
+                        }
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="rounded-xl bg-red-600/90 hover:bg-red-600 px-3 py-1.5 text-xs font-bold text-white transition flex items-center gap-1.5 shadow-md shadow-red-600/30"
+                      >
+                        <ExternalLink className="h-3.5 w-3.5" />
+                        <span>YouTube'da ochish</span>
+                      </a>
+                    )}
                     <button
                       onClick={() => setIsPlayingOnline(false)}
                       className="rounded-xl bg-kinodark-surface border border-kinodark-border px-2.5 py-1.5 text-xs font-semibold text-kinotext-muted hover:text-white ml-1"

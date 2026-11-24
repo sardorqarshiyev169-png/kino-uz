@@ -4,7 +4,7 @@ export const UZBEK_OFFICIAL_PROVIDERS: StreamingProvider[] = [
   {
     id: 'kino_uz_player',
     name: "Kino uz Full HD Pleyer",
-    logo_path: 'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?auto=format&fit=crop&w=128&q=80',
+    logo_path: 'https://image.tmdb.org/t/p/w500/3elxN7ccXv7v9oXAROnFFWE3ZN8.jpg',
     url: 'https://kino-uz-rho.vercel.app',
     quality: 'Full HD 1080p',
     isOfficial: true,
@@ -13,7 +13,7 @@ export const UZBEK_OFFICIAL_PROVIDERS: StreamingProvider[] = [
   {
     id: 'allplay',
     name: "Allplay (O'zbekiston)",
-    logo_path: 'https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?auto=format&fit=crop&w=128&q=80',
+    logo_path: 'https://image.tmdb.org/t/p/w500/sooJLXgLreKv5f0XNBA2e49O3Hj.jpg',
     url: 'https://allplay.uz',
     quality: 'Full HD / 4K',
     isOfficial: true,
@@ -22,7 +22,7 @@ export const UZBEK_OFFICIAL_PROVIDERS: StreamingProvider[] = [
   {
     id: 'itv',
     name: 'ITV.UZ',
-    logo_path: 'https://images.unsplash.com/photo-1522869635100-9f4c5e86aa37?auto=format&fit=crop&w=128&q=80',
+    logo_path: 'https://image.tmdb.org/t/p/w500/kMROEZmycOGJxLInJJh901oW7SY.jpg',
     url: 'https://itv.uz',
     quality: '1080p',
     isOfficial: true,
@@ -30,7 +30,7 @@ export const UZBEK_OFFICIAL_PROVIDERS: StreamingProvider[] = [
   },
 ];
 
-// TMDB ID va maxsus ID lar bo'yicha 100% tekshirilgan YouTube video kalitlari
+// TMDB ID va maxsus ID lar bo'yicha 100% tekshirilgan YouTube video kalitlari (Faqat to'liq filmlar)
 export const KNOWN_UZBEK_VIDEO_KEYS: Record<string, string> = {
   // Super Kelinchak (TMDB: 73058)
   '73058': 'Be-Ja91Z7Qk',
@@ -43,9 +43,6 @@ export const KNOWN_UZBEK_VIDEO_KEYS: Record<string, string> = {
   // Mahallada duv-duv gap (TMDB: 278882)
   'uz-2': 'BzZu2ZvjmjE',
   '278882': 'BzZu2ZvjmjE',
-
-  // Suyunchi
-  'uz-3': 'uiL7efSDc4o',
 
   // Kelinlar qo'zg'oloni (TMDB: 594145)
   'uz-4': 'PbDfeYRYcns',
@@ -70,33 +67,9 @@ export const KNOWN_UZBEK_VIDEO_KEYS: Record<string, string> = {
   // O'tkan kunlar (TMDB: 599768)
   'uz-9': 'b7ahyss6ajo',
   '599768': 'b7ahyss6ajo',
-
-  // Vatan
-  'uz-10': 'gt_OIgX5DFw',
-
-  // Mening akam bo'ydoq
-  'uz-11': 'YWbGKcyajks',
-
-  // Shaytanat
-  'uz-12': 'AsthRnnwvD4',
-
-  // Maftuningman
-  'uz-13': 'KQqVQIk1Hyc',
-
-  // Kelgindi kelin
-  'uz-14': 'FNcmlx8KGCA',
-
-  // Boyvachcha
-  'uz-15': 'MaFmS97kHOU',
-
-  // Telba
-  'uz-16': 'oDgbigMiKkU',
-
-  // Janob hech kim
-  'uz-17': 'ouCLHQHEXH0',
 };
 
-// Haqiqiy, tekshirilgan va sayt pleyerida 100% ochiladigan kinolar ro'yxati
+// Haqiqiy, tekshirilgan va sayt pleyerida 100% ochiladigan sara filmlar ro'yxati (Barchasi haqiqiy posterli)
 export const UZBEK_MOVIES: Movie[] = [
   // ==================== MILLIY O'ZBEK FILMLARI ====================
   {
@@ -106,7 +79,7 @@ export const UZBEK_MOVIES: Movie[] = [
     overview: "Zamonaviy shahar qizi Diana konservativ o'zbek oilasiga kelin bo'lib tushadi va an'anaviy qaynona mehrini qozonish uchun barcha milliy an'analarni o'rganishga kirishadi.",
     uz_overview: "Bahrom Yoqubovning o'zbek kinosidagi eng mashhur romantik komediyasi. Diana Yagofarova va Adiz Rajabov ijrosidagi qaynona-kelin munosabatlari va samimiy sevgi tarixi.",
     poster_path: 'https://image.tmdb.org/t/p/w500/3elxN7ccXv7v9oXAROnFFWE3ZN8.jpg',
-    backdrop_path: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1280&q=80',
+    backdrop_path: 'https://image.tmdb.org/t/p/original/3elxN7ccXv7v9oXAROnFFWE3ZN8.jpg',
     release_date: '2008-09-18',
     vote_average: 9.3,
     vote_count: 9800,
@@ -133,7 +106,7 @@ export const UZBEK_MOVIES: Movie[] = [
     overview: "G'afur G'ulomning mashhur asari asosida suratga olingan o'zbek kinematografiyasining eng buyuk durdonasi. Sho'x, zehnli va tadbirkor Qoravoyning qiziqarli sarguzashtlari.",
     uz_overview: "G'afur G'ulomning o'lmas qissasi asosida yaratilgan durdona kartina. Qoravoy ismli yetim bolaning qiyin zamonlarda o'z aqli, hazil-mutoyibasi va hayotsevarligi bilan qiyinchiliklarni yengib o'tishi tasvirlanadi.",
     poster_path: 'https://image.tmdb.org/t/p/w500/sooJLXgLreKv5f0XNBA2e49O3Hj.jpg',
-    backdrop_path: 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=1280&q=80',
+    backdrop_path: 'https://image.tmdb.org/t/p/original/sooJLXgLreKv5f0XNBA2e49O3Hj.jpg',
     release_date: '1977-05-12',
     vote_average: 9.6,
     vote_count: 8400,
@@ -160,7 +133,7 @@ export const UZBEK_MOVIES: Movie[] = [
     overview: "Toshkentning qadimiy mahallasidagi qiziqarli voqealar, mehr-oqibat va yoshlarning sof muhabbati haqidagi betakror o'zbek musiqiy komediyasi.",
     uz_overview: "O'zbek kinosining oltin fondidan joy olgan betakror asar. Ota-onalar o'z farzandlariga munosib juft topishga urinadilar, ammo yoshlar o'z sevgilarini tanlaydilar.",
     poster_path: 'https://image.tmdb.org/t/p/w500/kMROEZmycOGJxLInJJh901oW7SY.jpg',
-    backdrop_path: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1280&q=80',
+    backdrop_path: 'https://image.tmdb.org/t/p/original/kMROEZmycOGJxLInJJh901oW7SY.jpg',
     release_date: '1960-08-25',
     vote_average: 9.5,
     vote_count: 7200,
@@ -175,32 +148,13 @@ export const UZBEK_MOVIES: Movie[] = [
     where_to_watch: UZBEK_OFFICIAL_PROVIDERS,
   },
   {
-    id: 'uz-3',
-    title: 'Suyunchi (Buvijon)',
-    original_title: 'Suyunchi (Grandmother, 1982)',
-    overview: "Qishloqning qattiqqo'l, ammo adolatli va mehribon oqsoqoli Anzirat buvi va uning oilasi haqidagi unutilmas film.",
-    uz_overview: "Melis Abzalovning eng sevimli filmlaridan biri. O'zbek ayolining matonati, adolati va oilaparvarligi ramzi bo'lgan Anzirat buvi timsoli.",
-    poster_path: 'https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?auto=format&fit=crop&w=600&q=80',
-    backdrop_path: 'https://images.unsplash.com/photo-1478760329108-5c3ed9d495a0?auto=format&fit=crop&w=1280&q=80',
-    release_date: '1982-10-15',
-    vote_average: 9.4,
-    vote_count: 6500,
-    runtime: 82,
-    genres: ['Klassika', 'Komediya', 'Drama', 'Oilaviy'],
-    media_type: 'movie',
-    isUzbek: true,
-    tagline: 'Bir qishloqning vijdoni — Anzirat buvi',
-    trailer_key: 'uiL7efSDc4o', // Uzbekkino Official Full HD
-    where_to_watch: UZBEK_OFFICIAL_PROVIDERS,
-  },
-  {
     id: 'uz-4',
     title: "Kelinlar qo'zg'oloni",
     original_title: 'The Revolt of the Daughters-in-Law (1984)',
     overview: "Said Ahmad komediyasi asosida: 7 o'g'il va 7 kelinni temir intizomda ushlagan Farmonbibi xonadonidagi ibratli va kulgili voqealar.",
     uz_overview: "O'zbek teatr va kino san'atining eng mashhur asarlaridan biri. Zamonaviy kelin Nigoraning kelishi bilan Farmonbibining tartib-qoidalariga o'zgarishlar kirib keladi.",
     poster_path: 'https://image.tmdb.org/t/p/w500/vtV0T4uaBQyzVIxgehD2PF8S1ef.jpg',
-    backdrop_path: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1280&q=80',
+    backdrop_path: 'https://image.tmdb.org/t/p/original/vtV0T4uaBQyzVIxgehD2PF8S1ef.jpg',
     release_date: '1984-04-18',
     vote_average: 9.5,
     vote_count: 8100,
@@ -257,7 +211,7 @@ export const UZBEK_MOVIES: Movie[] = [
     overview: "Urushga 5 o'g'lini yuborib, ularning birortasi qaytib kelmagan matonatli o'zbek onasi Zulfiya Zokirovaning fojiali va buyuk jasorati.",
     uz_overview: "Jahongir Ahmedov rejissyorligida Ikkinchi jahon urushi g'alabasining 75 yilligiga bag'ishlangan tarixiy drama. Zulfiya aya timsolida barcha o'zbek onalarining buyuk matonati.",
     poster_path: 'https://image.tmdb.org/t/p/w500/lZBHuwlnrGI0Bp58M7kMcYLvqCP.jpg',
-    backdrop_path: 'https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=1280&q=80',
+    backdrop_path: 'https://image.tmdb.org/t/p/original/lZBHuwlnrGI0Bp58M7kMcYLvqCP.jpg',
     release_date: '2020-05-09',
     vote_average: 9.4,
     vote_count: 6200,
@@ -276,7 +230,7 @@ export const UZBEK_MOVIES: Movie[] = [
     overview: "Xalqaro narkotrafik tarmog'iga qarshi kurashuvchi O'zbekiston maxsus xizmati xodimining xatarli maxfiy operatsiyasi.",
     uz_overview: "Rustam Sa'diyevning shov-shuvli trilleri. O'zbekiston va xalqaro kinoijodkorlar hamkorligida suratga olingan professional jangari film.",
     poster_path: 'https://image.tmdb.org/t/p/w500/znlAayK065tNK6qATw3Lkem8FiG.jpg',
-    backdrop_path: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1280&q=80',
+    backdrop_path: 'https://image.tmdb.org/t/p/original/znlAayK065tNK6qATw3Lkem8FiG.jpg',
     release_date: '2016-01-15',
     vote_average: 8.8,
     vote_count: 5400,
@@ -295,7 +249,7 @@ export const UZBEK_MOVIES: Movie[] = [
     overview: "Abdulla Qodiriyning o'lmas romani asosida: Otabek va Kumushning fojiali, sof muhabbati hamda Qo'qon xonligi davridagi ziddiyatlar.",
     uz_overview: "O'zbek kinosining eng yuksak cho'qqisi. Otabek, Kumush, Zaynab va Yusufbek hoji obrazlari orqali millat fojiasi va sof muhabbat tarannum etilgan.",
     poster_path: 'https://image.tmdb.org/t/p/w500/7yrpcJcMl8aN90nhh0sONHO7Oik.jpg',
-    backdrop_path: 'https://images.unsplash.com/photo-1478760329108-5c3ed9d495a0?auto=format&fit=crop&w=1280&q=80',
+    backdrop_path: 'https://image.tmdb.org/t/p/original/7yrpcJcMl8aN90nhh0sONHO7Oik.jpg',
     release_date: '1969-11-04',
     vote_average: 9.7,
     vote_count: 9200,
@@ -306,158 +260,6 @@ export const UZBEK_MOVIES: Movie[] = [
     tagline: "O'zbek adabiyoti va kinosining buyuk muhabbat dostoni",
     trailer_key: 'b7ahyss6ajo', // Uzbekkino Official Full HD (1969)
     isTopRated: true,
-    where_to_watch: UZBEK_OFFICIAL_PROVIDERS,
-  },
-  {
-    id: 'uz-10',
-    title: 'Vatan',
-    original_title: 'Homeland (2006)',
-    overview: "Ikkinchi jahon urushi davrida nemis asirligi va chet eldagi muhojirlik azoblarini yengib, vatanga intilgan o'zbek yigiti qismati.",
-    uz_overview: "Zulfiqor Musoqovning eng chuqur falsafiy asari. Inson qayerda yashamasin, uning qalbi ona yurt tuprog'i bilan tirik ekani haqidagi ibratli drama.",
-    poster_path: 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=600&q=80',
-    backdrop_path: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1280&q=80',
-    release_date: '2006-05-09',
-    vote_average: 9.1,
-    vote_count: 5100,
-    runtime: 105,
-    genres: ['Tarixiy', 'Harbiy', 'Drama'],
-    media_type: 'movie',
-    isUzbek: true,
-    tagline: "Inson qayerda bo'lmasin, uning qalbi Vatanda yashaydi",
-    trailer_key: 'gt_OIgX5DFw', // Uzbekkino Official Full HD
-    where_to_watch: UZBEK_OFFICIAL_PROVIDERS,
-  },
-  {
-    id: 'uz-11',
-    title: "Mening akam bo'ydoq",
-    original_title: 'My Brother is a Bachelor (2011)',
-    overview: "Akasini uylantirish uchun har xil qiziqarli va kulgili rejalarni amalga oshirgan ukaning hayajonli sarguzashtlari.",
-    uz_overview: "Alisher Uzoqovning mashhur zamonaviy komediyasi. Oila, qarindoshlar va sevgi haqidagi eng sevimli yoshlarbop filmlardan biri.",
-    poster_path: 'https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?auto=format&fit=crop&w=600&q=80',
-    backdrop_path: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1280&q=80',
-    release_date: '2011-03-21',
-    vote_average: 8.7,
-    vote_count: 6100,
-    runtime: 88,
-    genres: ['Komediya', 'Melodrama', 'Yoshlar'],
-    media_type: 'movie',
-    isUzbek: true,
-    tagline: "Har bir oilada bitta bo'ydoq bor!",
-    trailer_key: 'YWbGKcyajks', // Full HD movie stream
-    where_to_watch: UZBEK_OFFICIAL_PROVIDERS,
-  },
-  {
-    id: 'uz-12',
-    title: 'Shaytanat',
-    original_title: 'Shaytanat (Serial, 1998)',
-    overview: "Tohir Malik asari asosidagi afsonaviy o'zbek kriminal dramasi: Asadbek va 90-yillardagi jinoiy olam sirlari.",
-    uz_overview: "Yodgor Sa'diyev boshchiligida suratga olingan ko'p qismli buyuk serial. Asadbek, Jamshid, Chuvrindi va ularning murakkab taqdirlari.",
-    poster_path: 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=600&q=80',
-    backdrop_path: 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=1280&q=80',
-    release_date: '1998-02-14',
-    vote_average: 9.6,
-    vote_count: 9800,
-    runtime: 55,
-    genres: ['Kriminal', 'Drama', 'Triller', 'Serial'],
-    media_type: 'tv',
-    isUzbek: true,
-    tagline: 'Qilmish — qidirmish',
-    trailer_key: 'AsthRnnwvD4', // UzbekFilmsHD Official 1-qism
-    where_to_watch: UZBEK_OFFICIAL_PROVIDERS,
-  },
-  {
-    id: 'uz-13',
-    title: 'Maftuningman',
-    original_title: 'Delighted by You (1958)',
-    overview: "O'zbek kino san'atining ilk musiqiy komediyasi. O'zbekiston bo'ylab iste'dodli san'atkorlarni izlab topish haqidagi yorqin va quvnoq kartina.",
-    uz_overview: "Yo'ldosh A'zamov rejissyorligidagi birinchi o'zbek rangli musiqiy komediyasi. 'Do'ppi tikdim ipaklari tillodan' qo'shig'i shu filmda.",
-    poster_path: 'https://images.unsplash.com/photo-1514306191717-452ec28c7814?auto=format&fit=crop&w=600&q=80',
-    backdrop_path: 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=1280&q=80',
-    release_date: '1958-09-01',
-    vote_average: 9.5,
-    vote_count: 4800,
-    runtime: 83,
-    genres: ['Klassika', 'Komediya', 'Musiqiy'],
-    media_type: 'movie',
-    isUzbek: true,
-    tagline: "Do'ppi tikdim ipaklari tillodan...",
-    trailer_key: 'KQqVQIk1Hyc', // Uzbekkino Official Full HD
-    where_to_watch: UZBEK_OFFICIAL_PROVIDERS,
-  },
-  {
-    id: 'uz-14',
-    title: 'Kelgindi kelin',
-    original_title: 'Alien Bride (2006)',
-    overview: "AQShdan O'zbekistonga amaliyot o'tash uchun kelgan chet ellik qiz va o'zbek yigitining samimiy muhabbat sarguzashtlari.",
-    uz_overview: "Rustam Sa'diyevning mashhur romantik komediyasi. Ikki xil madaniyat, milliy an'analar va sof sevgining g'alabasi.",
-    poster_path: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=600&q=80',
-    backdrop_path: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1280&q=80',
-    release_date: '2006-03-08',
-    vote_average: 8.9,
-    vote_count: 5700,
-    runtime: 90,
-    genres: ['Komediya', 'Melodrama', 'Yoshlar'],
-    media_type: 'movie',
-    isUzbek: true,
-    tagline: "Amerikalik kelin o'zbek xonadonida!",
-    trailer_key: 'FNcmlx8KGCA', // NevoFilms Official Full HD
-    where_to_watch: UZBEK_OFFICIAL_PROVIDERS,
-  },
-  {
-    id: 'uz-15',
-    title: 'Boyvachcha',
-    original_title: 'The Rich Boy (2007)',
-    overview: "Boy xonadonning erka va dangasa o'g'li hayot sinovlariga duch kelishi va haqiqiy sevgi orqali o'zgarishi haqidagi mashhur o'zbek komediyasi.",
-    uz_overview: "Jahongir Poziljonov va Dilshodbek Kattabekov ijrosidagi qiziqarli, kulgili va ibratli zamonaviy o'zbek komediyasi.",
-    poster_path: 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=600&q=80',
-    backdrop_path: 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=1280&q=80',
-    release_date: '2007-06-15',
-    vote_average: 8.6,
-    vote_count: 5100,
-    runtime: 85,
-    genres: ['Komediya', 'Yoshlar'],
-    media_type: 'movie',
-    isUzbek: true,
-    tagline: 'Boyvachcha qishloqda!',
-    trailer_key: 'MaFmS97kHOU', // Full HD stream
-    where_to_watch: UZBEK_OFFICIAL_PROVIDERS,
-  },
-  {
-    id: 'uz-16',
-    title: 'Telba',
-    original_title: 'The Madman (2008)',
-    overview: "Boy oilaning qizi va oddiy mard yigit o'rtasidagi fojiali va go'zal sevgi qissasi. Sevgi uchun hamma narsadan voz kechgan yigit fojiasi.",
-    uz_overview: "Rustam Sa'diyevning eng mashhur melodramasi. Ulug'bek Qodirov va Dilnoza Kubayeva bosh rollarda.",
-    poster_path: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=600&q=80',
-    backdrop_path: 'https://images.unsplash.com/photo-1478760329108-5c3ed9d495a0?auto=format&fit=crop&w=1280&q=80',
-    release_date: '2008-04-12',
-    vote_average: 9.0,
-    vote_count: 6700,
-    runtime: 100,
-    genres: ['Melodrama', 'Drama'],
-    media_type: 'movie',
-    isUzbek: true,
-    tagline: 'Meni sevgim telba...',
-    trailer_key: 'oDgbigMiKkU', // Uzbekkino Official Full HD
-    where_to_watch: UZBEK_OFFICIAL_PROVIDERS,
-  },
-  {
-    id: 'uz-17',
-    title: 'Janob hech kim',
-    original_title: 'Mr. Nobody (2009)',
-    overview: "O'zini hech kim deb bilgan oddiy yigitning tasodifiy voqealar sabab katta muammolarga aralashib qolishi va o'z baxtini topishi.",
-    uz_overview: "Alisher Uzoqovning mashhur kinokomediyasi. Qiziqarli syujet, yuqori sifatli hazillar va yoshlarning sevimli filmi.",
-    poster_path: 'https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?auto=format&fit=crop&w=600&q=80',
-    backdrop_path: 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=1280&q=80',
-    release_date: '2009-11-20',
-    vote_average: 8.8,
-    vote_count: 5900,
-    runtime: 90,
-    genres: ['Komediya', 'Melodrama'],
-    media_type: 'movie',
-    isUzbek: true,
-    tagline: 'Hech kimdan — janobga qadar',
-    trailer_key: 'ouCLHQHEXH0', // NevoFilms Official Full HD
     where_to_watch: UZBEK_OFFICIAL_PROVIDERS,
   },
 

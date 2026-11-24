@@ -404,6 +404,12 @@ export default function MovieDetailsPage() {
                   <span>Film davomiyligi: {movie.runtime || 120} daqiqa</span>
                   <span>Agar bitta server sekin ishlasa, yuqoridagi 2-Server yoki 3-Serverni bosing.</span>
                 </div>
+
+                {movie.isTarjima && (
+                  <div className="mt-2 text-[11px] text-amber-300 bg-amber-500/10 border border-amber-500/20 rounded-xl px-3 py-2 flex items-center gap-2">
+                    <span>💡 Tarjima filmlarda audio yo'lakchasini sozlash uchun pleyer ichidagi sozlamalar (Audio/Settings) bo'limidan foydalaning yoki pastdagi AsilMedia / Mover.uz platformalaridan tomosha qiling.</span>
+                  </div>
+                )}
               </div>
             )}
 

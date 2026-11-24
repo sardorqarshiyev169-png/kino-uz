@@ -1,5 +1,6 @@
 import { Movie } from './types';
 import { INITIAL_MOVIES, fetchFromTMDB, formatTmdbItem } from './tmdb';
+import { UZBEK_MOVIES } from './uzbek-movies';
 
 export interface AiRecommendationResult {
   reply: string;
@@ -243,8 +244,37 @@ Quyidagi kartochkalardan birini bosib, to'liq ma'lumotlar, rasmiy treyler va qul
 
   // 2. Thematic / Genre Semantic Matchers
 
+  // Uzbek Cinema ("o'zbek", "uzbek", "milliy", "shum bola", "abdullajon", "suyunchi", "kelinlar", "otkan kunlar", "ilhaq", "baron")
+  if (
+    normQuery.includes('uzbek') ||
+    normQuery.includes('milliy') ||
+    normQuery.includes('shum bola') ||
+    normQuery.includes('mahallada') ||
+    normQuery.includes('abdullajon') ||
+    normQuery.includes('suyunchi') ||
+    normQuery.includes('kelinlar') ||
+    normQuery.includes('ilhaq') ||
+    normQuery.includes('baron') ||
+    normQuery.includes('shaytanat') ||
+    normQuery.includes('otkan kunlar')
+  ) {
+    tags.push("O'zbek Filmlari", 'Oltin Fond', 'Milliy Kino', 'Klassika');
+    matchedMovies.push(...UZBEK_MOVIES.slice(0, 6));
+    explanation = `🇺🇿 **O'zbekiston milliy kinematografiyasining eng sara durdonalari!**
+
+O'zbek kinosining oltin fondidan joy olgan va xalqimizning eng sevimli filmlari:
+
+• **Shum bola (1977)** — G'afur G'ulom qissasi asosidagi unutilmas komediya va sarguzasht.
+• **Mahallada duv-duv gap (1960)** — Toshkentning qadimiy mahallasidagi mehr-oqibat va muhabbat qissasi.
+• **Kelinlar qo'zg'oloni (1984)** — Farmonbibi xonadonidagi ibratli va kulgili voqealar.
+• **Abdullajon (1991)** — O'zga sayyoralik bola va mo'jizaviy ketmonlar haqidagi o'zbek fantastikasi.
+• **Osmondagi bolalar (2002)** — To'rt do'stning yoshligi, orzulari va samimiy do'stligi.
+• **Ilhaq (2020)** — 5 o'g'lini urushga kuzatgan matonatli o'zbek onasi jasorati.
+
+Quyidagi kartochkalar orqali istalgan filmni tanlab, to'liq HD formatda bepul tomosha qilishingiz mumkin!`;
+  }
   // Interstellar / Nolan
-  if (normQuery.includes('interstellar') || normQuery.includes('nolan')) {
+  else if (normQuery.includes('interstellar') || normQuery.includes('nolan')) {
     tags.push('Koinot', 'Ilmiy-fantastika', 'Vaqt', 'Christopher Nolan');
     const matches = INITIAL_MOVIES.filter((m) =>
       ['157336', '27205', '693134', '872585'].includes(String(m.id))

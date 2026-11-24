@@ -80,6 +80,7 @@ export const Navbar: React.FC = () => {
     { href: '/movies', label: 'Filmlar', icon: Film },
     { href: '/tv', label: 'Seriallar', icon: Tv },
     { href: '/anime', label: 'Anime', icon: Flame },
+    { href: '/uzbek-movies', label: "O'zbek kino", badge: 'UZ' },
     {
       href: '/ai-assistant',
       label: 'AI Maslahatchi',
@@ -124,6 +125,11 @@ export const Navbar: React.FC = () => {
                       />
                     )}
                     <span>{link.label}</span>
+                    {link.badge && (
+                      <span className="ml-1 rounded-md bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 px-1.5 py-0.5 text-[9px] font-black uppercase tracking-wider">
+                        {link.badge}
+                      </span>
+                    )}
                     {link.highlight && (
                       <span className="ml-1 rounded-full bg-kinopurple-primary px-1.5 py-0.2 text-[10px] font-bold text-white uppercase tracking-wider">
                         AI
@@ -341,6 +347,11 @@ export const Navbar: React.FC = () => {
                   >
                     {Icon && <Icon className="h-4 w-4 text-kinopurple-secondary" />}
                     <span>{link.label}</span>
+                    {link.badge && (
+                      <span className="ml-auto rounded-md bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 px-1.5 py-0.5 text-[9px] font-black uppercase tracking-wider">
+                        {link.badge}
+                      </span>
+                    )}
                   </Link>
                 );
               })}

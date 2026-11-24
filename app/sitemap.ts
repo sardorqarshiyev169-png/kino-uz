@@ -1,5 +1,6 @@
 import { MetadataRoute } from 'next';
 import { INITIAL_MOVIES } from '@/lib/tmdb';
+import { UZBEK_MOVIES } from '@/lib/uzbek-movies';
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://kino-uz-rho.vercel.app';
@@ -10,6 +11,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: new Date(),
       changeFrequency: 'daily',
       priority: 1.0,
+    },
+    {
+      url: `${baseUrl}/uzbek-movies`,
+      lastModified: new Date(),
+      changeFrequency: 'daily',
+      priority: 0.95,
     },
     {
       url: `${baseUrl}/movies`,
@@ -43,7 +50,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   ];
 
-  const movieRoutes: MetadataRoute.Sitemap = INITIAL_MOVIES.map((movie) => ({
+  const allKnownMovies = [...INITIAL_MOVIES, ...UZBEK_MOVIES];
+
+  const movieRoutes: MetadataRoute.Sitemap = allKnownMovies.map((movie) => ({
     url: `${baseUrl}/movie/${movie.id}`,
     lastModified: new Date(),
     changeFrequency: 'weekly',

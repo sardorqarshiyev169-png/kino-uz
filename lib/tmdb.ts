@@ -1,4 +1,5 @@
 import { Movie, Genre, StreamingProvider } from './types';
+import { UZBEK_MOVIES } from './uzbek-movies';
 
 export const GENRES: Genre[] = [
   { id: 28, name: 'Action', uzName: 'Jangari' },
@@ -360,7 +361,10 @@ export function getAllMovies(): Movie[] {
 }
 
 export function getMovieById(id: string | number): Movie | undefined {
-  return INITIAL_MOVIES.find((m) => String(m.id) === String(id));
+  return (
+    INITIAL_MOVIES.find((m) => String(m.id) === String(id)) ||
+    UZBEK_MOVIES.find((m) => String(m.id) === String(id))
+  );
 }
 
 export function getTrendingMovies(): Movie[] {
@@ -389,7 +393,8 @@ export function getAnimeList(): Movie[] {
 
 export function searchLocalMovies(query: string, type?: string, genre?: string): Movie[] {
   const q = query.toLowerCase().trim();
-  return INITIAL_MOVIES.filter((m) => {
+  const allLocal = [...INITIAL_MOVIES, ...UZBEK_MOVIES];
+  return allLocal.filter((m) => {
     const matchesQuery =
       !q ||
       m.title.toLowerCase().includes(q) ||

@@ -16,6 +16,7 @@ import {
   fetchFromTMDB,
   formatTmdbItem,
 } from '@/lib/tmdb';
+import { UZBEK_MOVIES } from '@/lib/uzbek-movies';
 import {
   Flame,
   Star,
@@ -28,6 +29,7 @@ import {
   ArrowRight,
   ShieldCheck,
   Zap,
+  Award,
 } from 'lucide-react';
 
 export default function HomePage() {
@@ -178,6 +180,15 @@ export default function HomePage() {
         movies={trending}
         viewAllLink="/movies?sort=popularity"
         icon={TrendingUp}
+      />
+
+      {/* 2.5. Dedicated Uzbek Cinema Section */}
+      <MovieCarousel
+        title="🇺🇿 O'zbek Filmlari (Oltin Fond & Premyeralar)"
+        subtitle="Shum bola, Mahallada duv-duv gap, Kelinlar qo'zg'oloni, Abdullajon, Osmondagi bolalar va boshqalar"
+        movies={UZBEK_MOVIES}
+        viewAllLink="/uzbek-movies"
+        icon={Award}
       />
 
       {/* 3. Popular Movies ("Mashhur filmlar") */}

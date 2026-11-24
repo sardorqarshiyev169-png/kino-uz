@@ -114,8 +114,11 @@ export default function MovieDetailsPage() {
 
   const isTvShow = movie.media_type === 'tv' || movie.media_type === 'anime';
 
-  // Real full movie stream URLs by TMDB ID
+  // Real full movie stream URLs by TMDB ID or YouTube embed for Uzbek films
   const getVideoSrc = () => {
+    if (movie.isUzbek && movie.trailer_key) {
+      return `https://www.youtube-nocookie.com/embed/${movie.trailer_key}?autoplay=1&rel=0`;
+    }
     if (selectedServer === 'server1') {
       return isTvShow
         ? `https://multiembed.mov/?video_id=${movie.id}&tmdb=1&s=${selectedSeason}&e=${selectedEpisode}`

@@ -89,6 +89,14 @@ const TITLE_ALIASES: Record<string, { term: string; uzName: string; isFranchise?
   'mahallada duv-duv gap': { term: 'Mahallada duv-duv gap', uzName: 'Mahallada duv-duv gap' },
   'kelinlar qozgoloni': { term: "Kelinlar qo'zg'oloni", uzName: "Kelinlar Qo'zg'oloni" },
   'kelinlar qo\'zg\'oloni': { term: "Kelinlar qo'zg'oloni", uzName: "Kelinlar Qo'zg'oloni" },
+  'super kelinchak': { term: 'Super kelinchak', uzName: 'Super Kelinchak' },
+  'super kelin': { term: 'Super kelinchak', uzName: 'Super Kelinchak' },
+  'boyvachcha': { term: 'Boyvachcha', uzName: 'Boyvachcha' },
+  'telba': { term: 'Telba', uzName: 'Telba' },
+  'janob hech kim': { term: 'Janob hech kim', uzName: 'Janob Hech Kim' },
+  'otkan kunlar': { term: "O'tkan kunlar", uzName: "O'tkan Kunlar" },
+  'abdullajon': { term: 'Abdullajon', uzName: 'Abdullajon' },
+  'osmondagi bolalar': { term: 'Osmondagi bolalar', uzName: 'Osmondagi Bolalar' },
 };
 
 function normalizeString(str: string): string {

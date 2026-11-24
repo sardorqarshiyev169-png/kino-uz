@@ -16,7 +16,7 @@ import {
   fetchFromTMDB,
   formatTmdbItem,
 } from '@/lib/tmdb';
-import { UZBEK_MOVIES, fetchLiveUzbekMoviesFromTMDB } from '@/lib/uzbek-movies';
+import { UZBEK_MOVIES } from '@/lib/uzbek-movies';
 import {
   Flame,
   Star,
@@ -111,12 +111,6 @@ export default function HomePage() {
             .map((x: any) => formatTmdbItem(x, 'anime'));
           if (list.length > 0) setAnime(list);
         }
-
-        // Live Uzbek films from TMDB
-        const liveUzbek = await fetchLiveUzbekMoviesFromTMDB();
-        if (liveUzbek && liveUzbek.length > 0) {
-          setUzbekMovies([...UZBEK_MOVIES, ...liveUzbek.slice(0, 10)]);
-        }
       } catch (err) {
         console.warn('Failed to load weekly live movies:', err);
       }
@@ -189,10 +183,10 @@ export default function HomePage() {
         icon={TrendingUp}
       />
 
-      {/* 2.5. Dedicated Uzbek Cinema Section */}
+      {/* 2.5. Dedicated Uzbek Cinema & Tarjima Section */}
       <MovieCarousel
-        title="🇺🇿 O'zbek Filmlari (Oltin Fond & Premyeralar)"
-        subtitle="Shum bola, Mahallada duv-duv gap, Kelinlar qo'zg'oloni, Abdullajon, Osmondagi bolalar va boshqalar"
+        title="🇺🇿 O'zbek Filmlari & Tarjima Kinolar"
+        subtitle="Super kelinchak, Shum bola, O'tkan kunlar, Forsaj, Garri Potter, Titanik va boshqa sara filmlar"
         movies={UZBEK_MOVIES}
         viewAllLink="/uzbek-movies"
         icon={Award}

@@ -66,6 +66,7 @@ export interface Movie {
   isPopular?: boolean;
   isRecent?: boolean;
   isUzbek?: boolean;
+  isTarjima?: boolean;
 }
 
 export interface Season {

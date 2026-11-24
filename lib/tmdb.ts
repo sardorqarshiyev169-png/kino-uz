@@ -1,5 +1,5 @@
 import { Movie, Genre, StreamingProvider } from './types';
-import { UZBEK_MOVIES } from './uzbek-movies';
+import { UZBEK_MOVIES, KNOWN_UZBEK_VIDEO_KEYS } from './uzbek-movies';
 
 export const GENRES: Genre[] = [
   { id: 28, name: 'Action', uzName: 'Jangari' },
@@ -320,7 +320,7 @@ export function formatTmdbItem(item: any, defaultType: 'movie' | 'tv' | 'anime' 
       item.original_language === 'uz' ||
       (Array.isArray(item.origin_country) && item.origin_country.includes('UZ')),
     where_to_watch: OFFICIAL_PROVIDERS,
-    trailer_key: 'zSWdZVtXT7E', // Default high quality trailer fallback
+    trailer_key: KNOWN_UZBEK_VIDEO_KEYS[String(item.id)] || undefined,
   };
 }
 

@@ -1,64 +1,28 @@
 'use client';
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import MovieCard from '@/components/MovieCard';
-import { UZBEK_MOVIES, fetchLiveUzbekMoviesFromTMDB } from '@/lib/uzbek-movies';
-import { Movie } from '@/lib/types';
-import { Search, Film, Star, Award, Sparkles, RefreshCw } from 'lucide-react';
+import { UZBEK_MOVIES } from '@/lib/uzbek-movies';
+import { Search, Film, Star, Award, Sparkles, CheckCircle2 } from 'lucide-react';
 
-const UZBEK_CATEGORIES = [
+const CATEGORIES = [
   'Barchasi',
-  'Oltin Fond',
-  'TMDB Yangi Kinolar',
+  "O'zbek Milliy Kinolari",
+  "Tarjima Kinolar (O'zbek tilida)",
   'Komediya',
-  'Tarixiy',
-  'Drama',
   'Jangari',
-  'Harbiy',
+  'Drama',
+  'Melodrama',
+  'Sarguzasht',
 ];
 
 export default function UzbekMoviesPage() {
-  const [allMovies, setAllMovies] = useState<Movie[]>(UZBEK_MOVIES);
-  const [isLoadingLive, setIsLoadingLive] = useState(false);
   const [search, setSearch] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('Barchasi');
   const [sortBy, setSortBy] = useState<'rating' | 'year_desc' | 'year_asc' | 'title'>('rating');
 
-  // Load live Uzbek movies from TMDB on client mount
-  useEffect(() => {
-    let isMounted = true;
-    async function loadTmdbUzbek() {
-      setIsLoadingLive(true);
-      try {
-        const liveItems = await fetchLiveUzbekMoviesFromTMDB();
-        if (isMounted && liveItems && liveItems.length > 0) {
-          // Combine curated gold fond with live TMDB movies
-          const combined = [...UZBEK_MOVIES];
-          const existingIds = new Set(combined.map((m) => String(m.id)));
-
-          for (const item of liveItems) {
-            if (!existingIds.has(String(item.id))) {
-              combined.push(item);
-              existingIds.add(String(item.id));
-            }
-          }
-          setAllMovies(combined);
-        }
-      } catch (err) {
-        console.warn('Failed to load TMDB Uzbek movies:', err);
-      } finally {
-        if (isMounted) setIsLoadingLive(false);
-      }
-    }
-
-    loadTmdbUzbek();
-    return () => {
-      isMounted = false;
-    };
-  }, []);
-
   const filteredMovies = useMemo(() => {
-    return allMovies.filter((movie) => {
+    return UZBEK_MOVIES.filter((movie) => {
       const q = search.toLowerCase().trim();
       const matchesSearch =
         !q ||
@@ -71,12 +35,12 @@ export default function UzbekMoviesPage() {
 
       if (selectedCategory === 'Barchasi') return true;
 
-      if (selectedCategory === 'Oltin Fond') {
-        return String(movie.id).startsWith('uz-');
+      if (selectedCategory === "O'zbek Milliy Kinolari") {
+        return !movie.isTarjima;
       }
 
-      if (selectedCategory === 'TMDB Yangi Kinolar') {
-        return !String(movie.id).startsWith('uz-');
+      if (selectedCategory === "Tarjima Kinolar (O'zbek tilida)") {
+        return Boolean(movie.isTarjima);
       }
 
       return movie.genres.some((g) => {
@@ -84,7 +48,7 @@ export default function UzbekMoviesPage() {
         return name.toLowerCase().includes(selectedCategory.toLowerCase());
       });
     });
-  }, [allMovies, search, selectedCategory]);
+  }, [search, selectedCategory]);
 
   const sortedMovies = useMemo(() => {
     const list = [...filteredMovies];
@@ -102,21 +66,21 @@ export default function UzbekMoviesPage() {
 
   return (
     <div className="min-h-screen py-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-      {/* Uzbek Cinema Header Banner */}
+      {/* Uzbek Cinema & Tarjima Header Banner */}
       <div className="relative overflow-hidden rounded-3xl border border-kinopurple-primary/30 bg-gradient-to-r from-[#171326] via-[#20192F] to-[#120e20] p-6 sm:p-10 mb-10 shadow-2xl">
         <div className="absolute -right-10 -bottom-10 w-80 h-80 rounded-full bg-kinopurple-primary/10 blur-3xl pointer-events-none" />
 
         <div className="relative z-10 max-w-3xl">
           <div className="inline-flex items-center gap-2 rounded-full bg-kinopurple-primary/20 px-3.5 py-1 text-xs font-bold text-kinopurple-secondary border border-kinopurple-primary/40 mb-3">
             <span className="text-sm">🇺🇿</span>
-            <span>O'zbekiston Milliy Kinosi • Oltin Fond & TMDB Jonli Katalog</span>
+            <span>O'zbekiston Milliy Kinosi & Tarjima Filmlar (O'zbek tilida)</span>
           </div>
 
           <h1 className="font-heading text-3xl sm:text-5xl font-black text-white tracking-tight">
-            O'zbek Filmlari
+            O'zbek Filmlari & Tarjima Kinolar
           </h1>
           <p className="mt-3 text-sm text-kinotext-muted leading-relaxed">
-            Shum bola, Mahallada duv-duv gap, Kelinlar qo'zg'oloni, O'tkan kunlar kabi o'lmas klassikalar, Abdullajon, Osmondagi bolalar, Baron va TMDB orqali avtomatik yangilanib boruvchi 350+ dan ortiq milliy o'zbek kinolari katalogi.
+            Super kelinchak, Shum bola, Mahallada duv-duv gap, O'tkan kunlar, Abdullajon, Osmondagi bolalar kabi milliy kino durdonalari hamda Forsaj, Garri Potter, Titanik, Avatar, Leon kabi o'zbek tiliga mahorat bilan tarjima qilingan jahon shoh asarlari — barchasi saytning o'zida to'liq Full HD formatda.
           </p>
 
           <div className="flex flex-wrap items-center gap-4 mt-6 text-xs text-kinotext-muted">
@@ -126,15 +90,15 @@ export default function UzbekMoviesPage() {
             </span>
             <span className="flex items-center gap-1.5 font-semibold text-white">
               <Film className="h-4 w-4 text-kinopurple-secondary" />
-              Oltin fond durdonalari
+              Milliy oltin fond & Zamonaviy kinolar
             </span>
             <span className="flex items-center gap-1.5 font-semibold text-white">
-              <Sparkles className="h-4 w-4 text-emerald-400" />
-              TMDB avtomatik indekslash
+              <Sparkles className="h-4 w-4 text-sky-400" />
+              Mashhur tarjima kinolar
             </span>
-            <span className="flex items-center gap-1.5 font-semibold text-white">
-              <Star className="h-4 w-4 text-yellow-400 fill-current" />
-              Rasmiy Full HD Pleyer
+            <span className="flex items-center gap-1.5 font-semibold text-emerald-400">
+              <CheckCircle2 className="h-4 w-4" />
+              Saytning o'zida to'liq ochiladi
             </span>
           </div>
         </div>
@@ -144,7 +108,7 @@ export default function UzbekMoviesPage() {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
         {/* Category Pills */}
         <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar p-1">
-          {UZBEK_CATEGORIES.map((cat) => (
+          {CATEGORIES.map((cat) => (
             <button
               key={cat}
               onClick={() => setSelectedCategory(cat)}
@@ -167,7 +131,7 @@ export default function UzbekMoviesPage() {
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder="O'zbek kinosini qidirish..."
+              placeholder="Film nomini qidirish..."
               className="w-full rounded-xl border border-kinodark-border bg-kinodark-card py-2 pl-9 pr-4 text-xs text-kinotext-main placeholder-kinotext-muted/60 focus:border-kinopurple-primary focus:outline-none"
             />
           </div>
@@ -187,30 +151,29 @@ export default function UzbekMoviesPage() {
 
       {/* Catalog Status Bar */}
       <div className="flex items-center justify-between text-xs text-kinotext-muted mb-6 px-1">
-        <div className="flex items-center gap-2">
-          <span>Jami <strong className="text-white font-bold">{sortedMovies.length} ta</strong> o'zbek kinosi ko'rsatilmoqda</span>
-          {isLoadingLive && (
-            <span className="flex items-center gap-1 text-[11px] text-kinopurple-secondary animate-pulse">
-              <RefreshCw className="h-3 w-3 animate-spin" /> TMDB'dan yangilanmoqda...
-            </span>
-          )}
+        <div>
+          Jami <strong className="text-white font-bold">{sortedMovies.length} ta</strong> sara film ko'rsatilmoqda (Har birida to'liq pleyer mavjud)
         </div>
-        <span>Har hafta yangi o'zbek filmlari avtomatik qo'shiladi</span>
+        <div className="hidden sm:block text-emerald-400 font-medium">
+          ✓ Barcha kinolar tekshirilgan va saytda to'liq ochiladi
+        </div>
       </div>
 
       {/* Movies Grid */}
       {sortedMovies.length > 0 ? (
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-6">
           {sortedMovies.map((movie) => {
-            const isGold = String(movie.id).startsWith('uz-');
+            const isTarjima = Boolean(movie.isTarjima);
             return (
               <div key={movie.id} className="relative group">
                 <MovieCard movie={movie} />
                 <div className="absolute top-2 left-2 pointer-events-none">
-                  <span className={`rounded-md backdrop-blur-md px-1.5 py-0.5 text-[9px] font-black text-white shadow uppercase tracking-wider ${
-                    isGold ? 'bg-amber-500/90' : 'bg-emerald-500/90'
-                  }`}>
-                    {isGold ? 'Oltin Fond' : 'UZB'}
+                  <span
+                    className={`rounded-md backdrop-blur-md px-1.5 py-0.5 text-[9px] font-black text-white shadow uppercase tracking-wider ${
+                      isTarjima ? 'bg-sky-500/90' : 'bg-amber-500/90'
+                    }`}
+                  >
+                    {isTarjima ? 'TARJIMA' : 'MILLIY'}
                   </span>
                 </div>
               </div>
@@ -222,7 +185,7 @@ export default function UzbekMoviesPage() {
           <Film className="h-12 w-12 text-kinotext-muted mb-3" />
           <h3 className="font-heading text-lg font-bold text-white">Bunday film topilmadi</h3>
           <p className="text-xs text-kinotext-muted mt-1 max-w-sm">
-            "{search}" bo'yicha o'zbek kinosi topilmadi. Qidiruv so'zini o'zgartirib ko'ring.
+            "{search}" bo'yicha film topilmadi. Qidiruv so'zini o'zgartirib ko'ring.
           </p>
         </div>
       )}

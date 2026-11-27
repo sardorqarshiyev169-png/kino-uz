@@ -380,28 +380,32 @@ export default function MovieDetailsPage() {
                           : 'bg-kinodark-surface text-kinotext-muted hover:text-white'
                       }`}
                     >
-                      {movie.embed_url ? "🇺🇿 O'zbekcha (Mover)" : 'Asosiy HD'}
+                      {movie.embed_url ? "🇺🇿 O'zbek tilida (Mover)" : 'Asosiy HD'}
                     </button>
-                    <button
-                      onClick={() => setSelectedServer('server2')}
-                      className={`rounded-xl px-3 py-1.5 text-xs font-bold transition ${
-                        selectedServer === 'server2'
-                          ? 'bg-kinopurple-primary text-white shadow-glow-purple'
-                          : 'bg-kinodark-surface text-kinotext-muted hover:text-white'
-                      }`}
-                    >
-                      Zaxira 1
-                    </button>
-                    <button
-                      onClick={() => setSelectedServer('server3')}
-                      className={`rounded-xl px-3 py-1.5 text-xs font-bold transition ${
-                        selectedServer === 'server3'
-                          ? 'bg-kinopurple-primary text-white shadow-glow-purple'
-                          : 'bg-kinodark-surface text-kinotext-muted hover:text-white'
-                      }`}
-                    >
-                      Zaxira 2
-                    </button>
+                    {!movie.embed_url && (
+                      <>
+                        <button
+                          onClick={() => setSelectedServer('server2')}
+                          className={`rounded-xl px-3 py-1.5 text-xs font-bold transition ${
+                            selectedServer === 'server2'
+                              ? 'bg-kinopurple-primary text-white shadow-glow-purple'
+                              : 'bg-kinodark-surface text-kinotext-muted hover:text-white'
+                          }`}
+                        >
+                          Zaxira 1
+                        </button>
+                        <button
+                          onClick={() => setSelectedServer('server3')}
+                          className={`rounded-xl px-3 py-1.5 text-xs font-bold transition ${
+                            selectedServer === 'server3'
+                              ? 'bg-kinopurple-primary text-white shadow-glow-purple'
+                              : 'bg-kinodark-surface text-kinotext-muted hover:text-white'
+                          }`}
+                        >
+                          Zaxira 2
+                        </button>
+                      </>
+                    )}
                     <button
                       onClick={() => setIsPlayingOnline(false)}
                       className="rounded-xl bg-kinodark-surface border border-kinodark-border px-2.5 py-1.5 text-xs font-semibold text-kinotext-muted hover:text-white ml-1"
@@ -428,7 +432,7 @@ export default function MovieDetailsPage() {
                   <span>Agar bitta server sekin ishlasa, yuqoridagi 2-Server yoki 3-Serverni bosing.</span>
                 </div>
 
-                {movie.isTarjima && (
+                {movie.isTarjima && !movie.embed_url && (
                   <div className="mt-2 text-[11px] text-amber-300 bg-amber-500/10 border border-amber-500/20 rounded-xl px-3 py-2 flex items-center gap-2">
                     <span>💡 Tarjima filmlarda audio yo'lakchasini sozlash uchun pleyer ichidagi sozlamalar (Audio/Settings) bo'limidan foydalaning yoki pastdagi AsilMedia / Mover.uz platformalaridan tomosha qiling.</span>
                   </div>

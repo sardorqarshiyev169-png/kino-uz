@@ -13,6 +13,8 @@ const CATEGORIES = [
   'Jangari',
   'Drama',
   'Melodrama',
+  'Klassika',
+  'Kriminal',
   'Sarguzasht',
 ];
 
@@ -80,7 +82,7 @@ export default function UzbekMoviesPage() {
             O'zbek Filmlari & Tarjima Kinolar
           </h1>
           <p className="mt-3 text-sm text-kinotext-muted leading-relaxed">
-            Super kelinchak, Shum bola, Mahallada duv-duv gap, O'tkan kunlar kabi milliy kino durdonalari hamda Cho'qintirgan ota (1, 2, 3-qismlar), Forsaj, Garri Potter, Titanik, Avatar kabi o'zbek tiliga mahorat bilan tarjima qilingan jahon shoh asarlari — barchasi saytning o'zida to'liq Full HD formatda.
+            Super kelinchak, Shum bola, Mahallada duv-duv gap, O'tkan kunlar kabi milliy kino durdonalari hamda Cho'qintirgan ota (1, 2, 3-qismlar) va Forsaj 1 kabi o'zbek tiliga mahorat bilan tarjima qilingan jahon shoh asarlari — barchasi faqat haqiqiy o'zbek tilidagi pleyerda to'liq Full HD formatda.
           </p>
 
           <div className="flex flex-wrap items-center gap-4 mt-6 text-xs text-kinotext-muted">

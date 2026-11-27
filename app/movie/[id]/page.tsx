@@ -121,34 +121,22 @@ export default function MovieDetailsPage() {
 
   const isTvShow = movie.media_type === 'tv' || movie.media_type === 'anime';
 
+  const isNationalUzbek = Boolean(movie.isUzbek && !movie.isTarjima);
+  const nationalKey = isNationalUzbek ? (movie.trailer_key || KNOWN_UZBEK_VIDEO_KEYS[String(movie.id)]) : undefined;
+
   // Real full movie stream URLs: National Uzbek cinema uses verified Full HD feeds; Foreign & Tarjima movies use high-speed multiembed cinema servers
   const getVideoSrc = () => {
     // 1. Direct Uzbek embed URL (e.g. Mover.uz with 100% full Uzbek dubbing)
     if (movie.embed_url) {
-      if (selectedServer === 'server1') {
-        return movie.embed_url;
-      }
-      if (selectedServer === 'server2') {
-        return `https://multiembed.mov/?video_id=${movie.id}&tmdb=1`;
-      }
-      return `https://embed.su/embed/movie/${movie.id}`;
+      return movie.embed_url;
     }
 
-    const isNationalUzbek = Boolean(movie.isUzbek && !movie.isTarjima);
-    const nationalKey = isNationalUzbek ? (movie.trailer_key || KNOWN_UZBEK_VIDEO_KEYS[String(movie.id)]) : undefined;
-
-    // National Uzbek movies (Super Kelinchak, Shum bola, O'tkan kunlar, etc.)
+    // 2. National Uzbek movies (Super Kelinchak, Shum bola, O'tkan kunlar, etc.)
     if (nationalKey) {
-      if (selectedServer === 'server1') {
-        return `https://www.youtube-nocookie.com/embed/${nationalKey}?autoplay=1&rel=0`;
-      }
-      if (selectedServer === 'server2') {
-        return `https://www.youtube.com/embed/${nationalKey}?autoplay=1`;
-      }
-      return `https://multiembed.mov/?video_id=${movie.id}&tmdb=1`;
+      return `https://www.youtube-nocookie.com/embed/${nationalKey}?autoplay=1&rel=0`;
     }
 
-    // Foreign & Tarjima Movies (Titanik, Forsaj, Garri Potter, Avatar, Interstellar, etc.)
+    // 3. Foreign Global Movies (Dune, Inception, Interstellar, etc.)
     // Full 2-3 hour movies stream from dedicated cinema servers:
     if (selectedServer === 'server1') {
       return isTvShow
@@ -339,7 +327,13 @@ export default function MovieDetailsPage() {
                         {movie.title} — To'liq film
                       </h4>
                       <p className="text-[11px] text-emerald-400 flex items-center gap-1">
-                        <CheckCircle2 className="h-3.5 w-3.5" /> {movie.embed_url ? "O'zbek tilida to'liq film (Mover HD)" : "To'liq film pleyeri (Full HD)"}
+                        <CheckCircle2 className="h-3.5 w-3.5" /> {
+                          movie.embed_url
+                            ? "O'zbek tilida to'liq film (Mover HD)"
+                            : nationalKey
+                              ? "O'zbek tilida to'liq film (Uzbekkino Rasmiy HD)"
+                              : "To'liq film pleyeri (Full HD)"
+                        }
                       </p>
                     </div>
                   </div>
@@ -372,18 +366,32 @@ export default function MovieDetailsPage() {
                         </select>
                       </div>
                     )}
-                    <button
-                      onClick={() => setSelectedServer('server1')}
-                      className={`rounded-xl px-3.5 py-1.5 text-xs font-bold transition ${
-                        selectedServer === 'server1'
-                          ? 'bg-kinopurple-primary text-white shadow-glow-purple'
-                          : 'bg-kinodark-surface text-kinotext-muted hover:text-white'
-                      }`}
-                    >
-                      {movie.embed_url ? "🇺🇿 O'zbek tilida (Mover)" : 'Asosiy HD'}
-                    </button>
-                    {!movie.embed_url && (
+                    {movie.embed_url ? (
+                      <button
+                        onClick={() => setSelectedServer('server1')}
+                        className="rounded-xl px-3.5 py-1.5 text-xs font-bold transition bg-kinopurple-primary text-white shadow-glow-purple"
+                      >
+                        🇺🇿 O'zbek tilida (Mover HD)
+                      </button>
+                    ) : nationalKey ? (
+                      <button
+                        onClick={() => setSelectedServer('server1')}
+                        className="rounded-xl px-3.5 py-1.5 text-xs font-bold transition bg-kinopurple-primary text-white shadow-glow-purple"
+                      >
+                        🇺🇿 O'zbek tilida (YouTube HD)
+                      </button>
+                    ) : (
                       <>
+                        <button
+                          onClick={() => setSelectedServer('server1')}
+                          className={`rounded-xl px-3.5 py-1.5 text-xs font-bold transition ${
+                            selectedServer === 'server1'
+                              ? 'bg-kinopurple-primary text-white shadow-glow-purple'
+                              : 'bg-kinodark-surface text-kinotext-muted hover:text-white'
+                          }`}
+                        >
+                          Asosiy HD
+                        </button>
                         <button
                           onClick={() => setSelectedServer('server2')}
                           className={`rounded-xl px-3 py-1.5 text-xs font-bold transition ${
@@ -429,14 +437,14 @@ export default function MovieDetailsPage() {
 
                 <div className="mt-3 flex items-center justify-between text-xs text-kinotext-muted px-1">
                   <span>Film davomiyligi: {movie.runtime || 120} daqiqa</span>
-                  <span>Agar bitta server sekin ishlasa, yuqoridagi 2-Server yoki 3-Serverni bosing.</span>
+                  {movie.embed_url || nationalKey || movie.isUzbek ? (
+                    <span className="text-emerald-400 font-semibold flex items-center gap-1">
+                      <CheckCircle2 className="h-3.5 w-3.5" /> 100% O'zbek tilidagi to'liq film
+                    </span>
+                  ) : (
+                    <span>Agar bitta server sekin ishlasa, yuqoridagi 2-Server yoki 3-Serverni bosing.</span>
+                  )}
                 </div>
-
-                {movie.isTarjima && !movie.embed_url && (
-                  <div className="mt-2 text-[11px] text-amber-300 bg-amber-500/10 border border-amber-500/20 rounded-xl px-3 py-2 flex items-center gap-2">
-                    <span>💡 Tarjima filmlarda audio yo'lakchasini sozlash uchun pleyer ichidagi sozlamalar (Audio/Settings) bo'limidan foydalaning yoki pastdagi AsilMedia / Mover.uz platformalaridan tomosha qiling.</span>
-                  </div>
-                )}
               </div>
             )}
 

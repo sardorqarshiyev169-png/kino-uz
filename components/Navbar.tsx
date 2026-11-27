@@ -20,7 +20,7 @@ import {
   Flame,
   Star,
 } from 'lucide-react';
-import { INITIAL_MOVIES } from '@/lib/tmdb';
+import { INITIAL_MOVIES, getAllMovies } from '@/lib/tmdb';
 import { Movie } from '@/lib/types';
 
 export const Navbar: React.FC = () => {
@@ -44,7 +44,7 @@ export const Navbar: React.FC = () => {
       return;
     }
     const q = searchQuery.toLowerCase().trim();
-    const results = INITIAL_MOVIES.filter(
+    const results = getAllMovies().filter(
       (m) =>
         m.title.toLowerCase().includes(q) ||
         (m.original_title && m.original_title.toLowerCase().includes(q)) ||

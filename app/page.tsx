@@ -186,7 +186,7 @@ export default function HomePage() {
       {/* 2.5. Dedicated Uzbek Cinema & Tarjima Section */}
       <MovieCarousel
         title="🇺🇿 O'zbek Filmlari & Tarjima Kinolar"
-        subtitle="Super kelinchak, Shum bola, O'tkan kunlar, Forsaj, Garri Potter, Titanik va boshqa sara filmlar"
+        subtitle="Super kelinchak, Shum bola, O'tkan kunlar, Cho'qintirgan ota (1, 2, 3), Forsaj 1 — barchasi 100% o'zbek tilida"
         movies={UZBEK_MOVIES}
         viewAllLink="/uzbek-movies"
         icon={Award}

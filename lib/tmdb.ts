@@ -369,8 +369,8 @@ export function getAllMovies(): Movie[] {
 
 export function getMovieById(id: string | number): Movie | undefined {
   return (
-    INITIAL_MOVIES.find((m) => String(m.id) === String(id)) ||
-    UZBEK_MOVIES.find((m) => String(m.id) === String(id))
+    UZBEK_MOVIES.find((m) => String(m.id) === String(id)) ||
+    INITIAL_MOVIES.find((m) => String(m.id) === String(id))
   );
 }
 

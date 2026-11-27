@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useMemo, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import MovieCard from '@/components/MovieCard';
-import { INITIAL_MOVIES, fetchFromTMDB, formatTmdbItem } from '@/lib/tmdb';
+import { INITIAL_MOVIES, getAllMovies, fetchFromTMDB, formatTmdbItem } from '@/lib/tmdb';
 import { Movie } from '@/lib/types';
 import { Search, Film, Tv, Flame, User, Sparkles, Loader2 } from 'lucide-react';
 
@@ -78,7 +78,7 @@ function SearchContent() {
     const q = query.toLowerCase().trim();
     if (!q) return [];
 
-    const localMatches = INITIAL_MOVIES.filter((movie) => {
+    const localMatches = getAllMovies().filter((movie) => {
       const matchesTitle =
         movie.title.toLowerCase().includes(q) ||
         (movie.original_title && movie.original_title.toLowerCase().includes(q));

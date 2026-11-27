@@ -55,6 +55,8 @@ export interface Movie {
   media_type: MediaType;
   tagline?: string;
   trailer_key?: string;
+  embed_url?: string;
+  external_watch_url?: string;
   cast?: CastMember[];
   crew?: CrewMember[];
   production_companies?: { id: number; name: string; logo_path?: string | null }[];

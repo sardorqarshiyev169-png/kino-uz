@@ -434,6 +434,8 @@ export const UZBEK_MOVIES: Movie[] = [
     isTopRated: true,
     isFeatured: true,
     tagline: "O'zbek tilida: Men unga rad eta olmaydigan taklifni aytaman.",
+    embed_url: 'https://mover.uz/video/embed/pR69Xlmm',
+    external_watch_url: 'https://mover.uz/watch/pR69Xlmm',
     where_to_watch: UZBEK_OFFICIAL_PROVIDERS,
     cast: [
       { id: 3084, name: 'Marlon Brando', character: 'Don Vito Corleone', profile_path: 'https://image.tmdb.org/t/p/w185/fuTEctlGs8fuR2WZeo85aB0F5tM.jpg' },
@@ -460,6 +462,8 @@ export const UZBEK_MOVIES: Movie[] = [
     isTarjima: true,
     isTopRated: true,
     tagline: "O'zbek tilida: Do'stlaringni yaqin tut, dushmanlaringni esa undan ham yaqinroq.",
+    embed_url: 'https://mover.uz/video/embed/Zv7aOBAA',
+    external_watch_url: 'https://mover.uz/watch/Zv7aOBAA',
     where_to_watch: UZBEK_OFFICIAL_PROVIDERS,
     cast: [
       { id: 1158, name: 'Al Pacino', character: 'Michael Corleone', profile_path: 'https://image.tmdb.org/t/p/w185/fMDDMDCgUbgL09Fxv2jJ0Fv3cZ1.jpg' },
@@ -485,6 +489,8 @@ export const UZBEK_MOVIES: Movie[] = [
     isUzbek: true,
     isTarjima: true,
     tagline: "O'zbek tilida: Men chiqib ketdim deb o'ylaganimda, ular meni yana tortib olishadi!",
+    embed_url: 'https://mover.uz/video/embed/pTauq6LL',
+    external_watch_url: 'https://mover.uz/watch/pTauq6LL',
     where_to_watch: UZBEK_OFFICIAL_PROVIDERS,
     cast: [
       { id: 1158, name: 'Al Pacino', character: 'Michael Corleone', profile_path: 'https://image.tmdb.org/t/p/w185/fMDDMDCgUbgL09Fxv2jJ0Fv3cZ1.jpg' },

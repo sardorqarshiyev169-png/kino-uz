@@ -123,6 +123,17 @@ export default function MovieDetailsPage() {
 
   // Real full movie stream URLs: National Uzbek cinema uses verified Full HD feeds; Foreign & Tarjima movies use high-speed multiembed cinema servers
   const getVideoSrc = () => {
+    // 1. Direct Uzbek embed URL (e.g. Mover.uz with 100% full Uzbek dubbing)
+    if (movie.embed_url) {
+      if (selectedServer === 'server1') {
+        return movie.embed_url;
+      }
+      if (selectedServer === 'server2') {
+        return `https://multiembed.mov/?video_id=${movie.id}&tmdb=1`;
+      }
+      return `https://embed.su/embed/movie/${movie.id}`;
+    }
+
     const isNationalUzbek = Boolean(movie.isUzbek && !movie.isTarjima);
     const nationalKey = isNationalUzbek ? (movie.trailer_key || KNOWN_UZBEK_VIDEO_KEYS[String(movie.id)]) : undefined;
 
@@ -202,8 +213,20 @@ export default function MovieDetailsPage() {
                 className="w-full flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-kinopurple-primary to-[#7C3AED] py-3.5 text-sm font-bold text-white shadow-lg shadow-kinopurple-primary/30 hover:brightness-110 transition"
               >
                 <Play className="h-4 w-4 fill-current" />
-                Kinoni Ko'rish (To'liq Film HD)
+                Kinoni Ko'rish ({movie.embed_url ? "O'zbek tilida" : "To'liq Film HD"})
               </button>
+
+              {movie.external_watch_url && (
+                <a
+                  href={movie.external_watch_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full flex items-center justify-center gap-2 rounded-xl border border-sky-500/40 bg-sky-500/10 py-2.5 text-xs font-semibold text-sky-300 hover:bg-sky-500/20 transition"
+                >
+                  <ExternalLink className="h-4 w-4 text-sky-400" />
+                  Mover.uz'da ochish (O'zbek tilida)
+                </a>
+              )}
 
               {movie.trailer_key && (
                 <button
@@ -316,7 +339,7 @@ export default function MovieDetailsPage() {
                         {movie.title} — To'liq film
                       </h4>
                       <p className="text-[11px] text-emerald-400 flex items-center gap-1">
-                        <CheckCircle2 className="h-3.5 w-3.5" /> To'liq film pleyeri (Full HD)
+                        <CheckCircle2 className="h-3.5 w-3.5" /> {movie.embed_url ? "O'zbek tilida to'liq film (Mover HD)" : "To'liq film pleyeri (Full HD)"}
                       </p>
                     </div>
                   </div>
@@ -357,7 +380,7 @@ export default function MovieDetailsPage() {
                           : 'bg-kinodark-surface text-kinotext-muted hover:text-white'
                       }`}
                     >
-                      Asosiy HD
+                      {movie.embed_url ? "🇺🇿 O'zbekcha (Mover)" : 'Asosiy HD'}
                     </button>
                     <button
                       onClick={() => setSelectedServer('server2')}

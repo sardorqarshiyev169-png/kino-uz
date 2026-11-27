@@ -12,6 +12,7 @@ interface MovieCarouselProps {
   viewAllLink?: string;
   icon?: LucideIcon;
   subtitle?: string;
+  viewAllText?: string;
 }
 
 export const MovieCarousel: React.FC<MovieCarouselProps> = ({
@@ -20,6 +21,7 @@ export const MovieCarousel: React.FC<MovieCarouselProps> = ({
   viewAllLink,
   icon: Icon,
   subtitle,
+  viewAllText,
 }) => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
@@ -56,7 +58,7 @@ export const MovieCarousel: React.FC<MovieCarouselProps> = ({
               href={viewAllLink}
               className="hidden sm:inline-flex text-xs font-semibold text-kinopurple-secondary hover:text-white transition mr-3"
             >
-              Barchasini ko'rish →
+              {viewAllText || 'View all →'}
             </Link>
           )}
 

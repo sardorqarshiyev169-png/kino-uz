@@ -81,7 +81,7 @@ export const INITIAL_MOVIES: Movie[] = [
     vote_average: 8.7,
     vote_count: 34500,
     runtime: 169,
-    genres: ['Ilmiy-fantastika', 'Drama', 'Sarguzasht'],
+    genres: ['Sci-Fi', 'Drama', 'Adventure'],
     media_type: 'movie',
     tagline: 'Insoniyatning oxiri bizning oxirimiz bo\'lishi shart emas.',
     trailer_key: 'zSWdZVtXT7E',
@@ -108,7 +108,7 @@ export const INITIAL_MOVIES: Movie[] = [
     vote_average: 8.6,
     vote_count: 5200,
     runtime: 166,
-    genres: ['Ilmiy-fantastika', 'Sarguzasht', 'Jangari'],
+    genres: ['Sci-Fi', 'Adventure', 'Action'],
     media_type: 'movie',
     tagline: 'Qumlar ostidagi imperiya qayta uyg\'onadi.',
     trailer_key: 'Way9Dexny3w',
@@ -134,7 +134,7 @@ export const INITIAL_MOVIES: Movie[] = [
     vote_average: 8.8,
     vote_count: 36000,
     runtime: 148,
-    genres: ['Jangari', 'Ilmiy-fantastika', 'Sarguzasht'],
+    genres: ['Action', 'Sci-Fi', 'Adventure'],
     media_type: 'movie',
     tagline: 'Sizning ongingiz — eng himoyasiz sahna.',
     trailer_key: 'YoHD9XEInc0',
@@ -157,9 +157,9 @@ export const INITIAL_MOVIES: Movie[] = [
     vote_average: 8.5,
     vote_count: 9200,
     runtime: 180,
-    genres: ['Drama', 'Tarixiy'],
+    genres: ['Drama', 'History'],
     media_type: 'movie',
-    tagline: 'Dunyoni butunlay o\'zgartirgan lahza.',
+    tagline: 'The story of the man who changed the world forever.',
     trailer_key: 'uYPbbksJxIg',
     isTrending: true,
     isTopRated: true,
@@ -177,9 +177,9 @@ export const INITIAL_MOVIES: Movie[] = [
     vote_average: 8.9,
     vote_count: 32000,
     runtime: 152,
-    genres: ['Drama', 'Jangari', 'Kriminal', 'Triller'],
+    genres: ['Action', 'Crime', 'Drama', 'Thriller'],
     media_type: 'movie',
-    tagline: 'Zulmatdan yorug\'likka, faqat qasos orqali.',
+    tagline: 'Why so serious?',
     trailer_key: 'EXeTwQWrcwY',
     isTopRated: true,
     isPopular: true,
@@ -197,9 +197,9 @@ export const INITIAL_MOVIES: Movie[] = [
     vote_average: 7.8,
     vote_count: 4800,
     runtime: 128,
-    genres: ['Jangari', 'Komediya', 'Ilmiy-fantastika'],
+    genres: ['Action', 'Comedy', 'Sci-Fi'],
     media_type: 'movie',
-    tagline: 'Hamma narsa o\'zgaradi, faqat ularning hazillari emas.',
+    tagline: 'Come together.',
     trailer_key: '73_1biulkYk',
     isTrending: true,
     isPopular: true,
@@ -218,9 +218,9 @@ export const INITIAL_MOVIES: Movie[] = [
     vote_average: 8.4,
     vote_count: 23000,
     runtime: 57,
-    genres: ['Fantastika', 'Drama', 'Jangari'],
+    genres: ['Sci-Fi & Fantasy', 'Drama', 'Action & Adventure'],
     media_type: 'tv',
-    tagline: 'Qish yaqinlashmoqda.',
+    tagline: 'Winter is coming.',
     trailer_key: 'KPLWWIOCOOQ',
     isPopular: true,
     where_to_watch: OFFICIAL_PROVIDERS,
@@ -237,9 +237,9 @@ export const INITIAL_MOVIES: Movie[] = [
     vote_average: 9.0,
     vote_count: 8900,
     runtime: 42,
-    genres: ['Animatsiya', 'Ilmiy-fantastika', 'Jangari'],
+    genres: ['Animation', 'Sci-Fi', 'Action'],
     media_type: 'tv',
-    tagline: 'Sehr va fan to\'qnashuvi.',
+    tagline: 'Where will you stand?',
     trailer_key: 'fXmAurh012s',
     isTopRated: true,
     where_to_watch: OFFICIAL_PROVIDERS,
@@ -256,9 +256,9 @@ export const INITIAL_MOVIES: Movie[] = [
     vote_average: 9.1,
     vote_count: 14500,
     runtime: 24,
-    genres: ['Animatsiya', 'Jangari', 'Fantastika'],
+    genres: ['Animation', 'Action', 'Sci-Fi & Fantasy'],
     media_type: 'anime',
-    tagline: 'Biz bu dunyoda tug\'ilganimiz uchungina ozodmiz.',
+    tagline: 'Fight for freedom.',
     trailer_key: 'MGRm4IzK1SQ',
     isTopRated: true,
     isPopular: true,
@@ -276,7 +276,7 @@ export const INITIAL_MOVIES: Movie[] = [
     vote_average: 8.8,
     vote_count: 8200,
     runtime: 24,
-    genres: ['Animatsiya', 'Jangari'],
+    genres: ['Animation', 'Action', 'Fantasy'],
     media_type: 'anime',
     trailer_key: 'VQGCKyvzIM4',
     isTrending: true,
@@ -291,18 +291,22 @@ export function formatTmdbItem(item: any, defaultType: 'movie' | 'tv' | 'anime' 
   const originalTitle = item.original_title || item.original_name || title;
   const releaseDate = item.release_date || item.first_air_date || '2024-01-01';
 
-  // Map genre IDs
+  const isUzbek =
+    item.original_language === 'uz' ||
+    (Array.isArray(item.origin_country) && item.origin_country.includes('UZ'));
+
+  // Map genre IDs (English for international movies, Uzbek for Uzbek movies)
   const genres = (item.genre_ids || item.genres || []).map((g: any) => {
     const id = typeof g === 'number' ? g : g.id;
     const found = GENRES.find((x) => x.id === id);
-    return found ? (found.uzName || found.name) : 'Kino';
+    return found ? (isUzbek ? (found.uzName || found.name) : found.name) : (isUzbek ? 'Kino' : 'Movie');
   });
 
   return {
     id: String(item.id),
     title,
     original_title: originalTitle,
-    overview: item.overview || 'Tavsif mavjud emas.',
+    overview: item.overview || (isUzbek ? 'Tavsif mavjud emas.' : 'No overview available.'),
     uz_overview: item.overview,
     poster_path: item.poster_path
       ? `https://image.tmdb.org/t/p/w500${item.poster_path}`
@@ -314,11 +318,9 @@ export function formatTmdbItem(item: any, defaultType: 'movie' | 'tv' | 'anime' 
     vote_average: Number(item.vote_average || 7.5),
     vote_count: item.vote_count || 120,
     runtime: item.runtime || 115,
-    genres: genres.length > 0 ? genres : ['Kino'],
+    genres: genres.length > 0 ? genres : [isUzbek ? 'Kino' : 'Movie'],
     media_type: defaultType === 'anime' ? 'anime' : (isTV ? 'tv' : 'movie'),
-    isUzbek:
-      item.original_language === 'uz' ||
-      (Array.isArray(item.origin_country) && item.origin_country.includes('UZ')),
+    isUzbek,
     where_to_watch: OFFICIAL_PROVIDERS,
     trailer_key: KNOWN_UZBEK_VIDEO_KEYS[String(item.id)] || undefined,
   };

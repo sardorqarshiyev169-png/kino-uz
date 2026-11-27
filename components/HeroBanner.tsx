@@ -81,16 +81,16 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ movies }) => {
             {currentMovie.runtime && (
               <span className="flex items-center gap-1 rounded-full bg-kinodark-surface/80 px-3 py-1 text-kinotext-main border border-kinodark-border">
                 <Clock className="h-3.5 w-3.5 text-kinopurple-secondary" />
-                {currentMovie.runtime} daqiqa
+                {currentMovie.runtime} min
               </span>
             )}
 
             <span className="rounded-full bg-kinopurple-primary/20 px-3 py-1 text-kinopurple-secondary border border-kinopurple-primary/40 uppercase tracking-wider text-[11px]">
               {currentMovie.media_type === 'tv'
-                ? 'Serial'
+                ? 'TV Series'
                 : currentMovie.media_type === 'anime'
                 ? 'Anime'
-                : 'Kino film'}
+                : 'Movie'}
             </span>
           </div>
 
@@ -114,9 +114,9 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ movies }) => {
             })}
           </div>
 
-          {/* Overview in Uzbek */}
+          {/* Overview */}
           <p className="line-clamp-3 text-sm sm:text-base text-kinotext-muted leading-relaxed drop-shadow">
-            {currentMovie.uz_overview || currentMovie.overview}
+            {currentMovie.overview || currentMovie.uz_overview}
           </p>
 
           {/* Action Buttons */}
@@ -127,7 +127,7 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ movies }) => {
               className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-kinopurple-primary to-[#7C3AED] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-kinopurple-primary/30 hover:brightness-110 transition duration-200"
             >
               <Play className="h-4 w-4 fill-current" />
-              Tomosha qilish
+              Watch Now
             </Link>
 
             {/* Watch Trailer Button */}
@@ -137,7 +137,7 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ movies }) => {
                 className="inline-flex items-center gap-2 rounded-xl border border-kinodark-border bg-kinodark-surface/80 px-5 py-3 text-sm font-semibold text-kinotext-main hover:bg-kinodark-surface hover:border-kinopurple-primary/50 transition duration-200 backdrop-blur-sm"
               >
                 <Film className="h-4 w-4 text-kinopurple-secondary" />
-                Treylerni ko'rish
+                Watch Trailer
               </button>
             )}
 
@@ -149,7 +149,7 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ movies }) => {
                   ? 'border-kinopurple-primary bg-kinopurple-primary text-white shadow-glow-purple'
                   : 'border-kinodark-border bg-kinodark-surface/80 text-kinotext-muted hover:text-white'
               }`}
-              title="Tomosha ro'yxatiga qo'shish"
+              title="Add to Watchlist"
             >
               <Bookmark className={`h-4 w-4 ${isSaved ? 'fill-current' : ''}`} />
             </button>
@@ -162,7 +162,7 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ movies }) => {
                   ? 'border-rose-500 bg-rose-500 text-white shadow-md shadow-rose-500/30'
                   : 'border-kinodark-border bg-kinodark-surface/80 text-kinotext-muted hover:text-rose-400'
               }`}
-              title="Sevimlilarga qo'shish"
+              title="Add to Favorites"
             >
               <Heart className={`h-4 w-4 ${isFav ? 'fill-current' : ''}`} />
             </button>

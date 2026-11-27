@@ -172,7 +172,7 @@ export default function MovieDetailsPage() {
             className="flex items-center gap-2 rounded-xl border border-kinodark-border bg-kinodark-card/80 px-3.5 py-2 text-xs font-semibold text-kinotext-main hover:bg-kinodark-surface backdrop-blur-md transition"
           >
             <ArrowLeft className="h-4 w-4" />
-            Orqaga
+            {movie.isUzbek ? 'Orqaga' : 'Back'}
           </button>
         </div>
       </div>
@@ -201,7 +201,9 @@ export default function MovieDetailsPage() {
                 className="w-full flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-kinopurple-primary to-[#7C3AED] py-3.5 text-sm font-bold text-white shadow-lg shadow-kinopurple-primary/30 hover:brightness-110 transition"
               >
                 <Play className="h-4 w-4 fill-current" />
-                Kinoni Ko'rish ({movie.embed_url ? "O'zbek tilida" : "To'liq Film HD"})
+                {movie.isUzbek
+                  ? `Kinoni Ko'rish (${movie.embed_url ? "O'zbek tilida" : "To'liq Film HD"})`
+                  : 'Watch Movie (Full HD)'}
               </button>
 
               {movie.external_watch_url && (
@@ -222,7 +224,7 @@ export default function MovieDetailsPage() {
                   className="w-full flex items-center justify-center gap-2 rounded-xl border border-kinodark-border bg-kinodark-surface/80 py-2.5 text-xs font-semibold text-kinotext-main hover:bg-kinodark-surface transition"
                 >
                   <Film className="h-4 w-4 text-kinopurple-secondary" />
-                  Treylerni ko'rish (YouTube)
+                  {movie.isUzbek ? "Treylerni ko'rish (YouTube)" : 'Watch Trailer'}
                 </button>
               )}
 
@@ -236,7 +238,9 @@ export default function MovieDetailsPage() {
                   }`}
                 >
                   <Heart className={`h-4 w-4 ${isFav ? 'fill-current' : ''}`} />
-                  {isFav ? 'Sevimlilarda' : 'Sevimlilar'}
+                  {movie.isUzbek
+                    ? (isFav ? 'Sevimlilarda' : 'Sevimlilar')
+                    : (isFav ? 'Favorited' : 'Favorites')}
                 </button>
 
                 <button
@@ -248,7 +252,9 @@ export default function MovieDetailsPage() {
                   }`}
                 >
                   <Bookmark className={`h-4 w-4 ${isSaved ? 'fill-current' : ''}`} />
-                  {isSaved ? 'Ro\'yxatda' : 'Keyin ko\'rish'}
+                  {movie.isUzbek
+                    ? (isSaved ? "Ro'yxatda" : "Keyin ko'rish")
+                    : (isSaved ? 'In Watchlist' : 'Watchlist')}
                 </button>
               </div>
             </div>
@@ -261,7 +267,7 @@ export default function MovieDetailsPage() {
               <div className="flex flex-wrap items-center gap-3 text-xs mb-3">
                 <span className="flex items-center gap-1 rounded-full bg-amber-500/20 px-3 py-1 font-bold text-amber-400 border border-amber-500/30">
                   <Star className="h-3.5 w-3.5 fill-current" />
-                  {movie.vote_average.toFixed(1)} / 10 ({movie.vote_count?.toLocaleString()} baho)
+                  {movie.vote_average.toFixed(1)} / 10 ({movie.vote_count?.toLocaleString()} {movie.isUzbek ? 'baho' : 'votes'})
                 </span>
 
                 <span className="flex items-center gap-1 rounded-full bg-kinodark-card px-3 py-1 text-kinotext-main border border-kinodark-border">
@@ -272,12 +278,16 @@ export default function MovieDetailsPage() {
                 {movie.runtime && (
                   <span className="flex items-center gap-1 rounded-full bg-kinodark-card px-3 py-1 text-kinotext-main border border-kinodark-border">
                     <Clock className="h-3.5 w-3.5 text-kinopurple-secondary" />
-                    {movie.runtime} daqiqa
+                    {movie.runtime} {movie.isUzbek ? 'daqiqa' : 'min'}
                   </span>
                 )}
 
                 <span className="rounded-full bg-kinopurple-primary/20 px-3 py-1 text-[11px] font-bold text-kinopurple-secondary border border-kinopurple-primary/40 uppercase tracking-wider">
-                  {movie.media_type}
+                  {movie.media_type === 'tv'
+                    ? (movie.isUzbek ? 'Serial' : 'TV Series')
+                    : movie.media_type === 'anime'
+                    ? 'Anime'
+                    : (movie.isUzbek ? 'Film' : 'Movie')}
                 </span>
               </div>
 
@@ -287,7 +297,7 @@ export default function MovieDetailsPage() {
               </h1>
               {movie.original_title && movie.original_title !== movie.title && (
                 <p className="text-sm text-kinotext-muted italic mt-1">
-                  Asl nomi: {movie.original_title}
+                  {movie.isUzbek ? 'Asl nomi:' : 'Original title:'} {movie.original_title}
                 </p>
               )}
 
@@ -324,7 +334,7 @@ export default function MovieDetailsPage() {
                     </span>
                     <div>
                       <h4 className="text-sm font-bold text-white">
-                        {movie.title} — To'liq film
+                        {movie.title} — {movie.isUzbek ? "To'liq film" : "Full Movie"}
                       </h4>
                       <p className="text-[11px] text-emerald-400 flex items-center gap-1">
                         <CheckCircle2 className="h-3.5 w-3.5" /> {
@@ -332,7 +342,7 @@ export default function MovieDetailsPage() {
                             ? "O'zbek tilida to'liq film (Mover HD)"
                             : nationalKey
                               ? "O'zbek tilida to'liq film (Uzbekkino Rasmiy HD)"
-                              : "To'liq film pleyeri (Full HD)"
+                              : (movie.isUzbek ? "To'liq film pleyeri (Full HD)" : "Full Movie Player (Full HD)")
                         }
                       </p>
                     </div>
@@ -349,7 +359,7 @@ export default function MovieDetailsPage() {
                         >
                           {[1, 2, 3, 4, 5, 6, 7, 8].map((s) => (
                             <option key={s} value={s}>
-                              {s}-Mavsum
+                              {movie.isUzbek ? `${s}-Mavsum` : `Season ${s}`}
                             </option>
                           ))}
                         </select>
@@ -360,7 +370,7 @@ export default function MovieDetailsPage() {
                         >
                           {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20].map((ep) => (
                             <option key={ep} value={ep}>
-                              {ep}-Qism
+                              {movie.isUzbek ? `${ep}-Qism` : `Episode ${ep}`}
                             </option>
                           ))}
                         </select>
@@ -390,7 +400,7 @@ export default function MovieDetailsPage() {
                               : 'bg-kinodark-surface text-kinotext-muted hover:text-white'
                           }`}
                         >
-                          Asosiy HD
+                          {movie.isUzbek ? 'Asosiy HD' : 'Server 1 (HD)'}
                         </button>
                         <button
                           onClick={() => setSelectedServer('server2')}
@@ -400,7 +410,7 @@ export default function MovieDetailsPage() {
                               : 'bg-kinodark-surface text-kinotext-muted hover:text-white'
                           }`}
                         >
-                          Zaxira 1
+                          {movie.isUzbek ? 'Zaxira 1' : 'Server 2'}
                         </button>
                         <button
                           onClick={() => setSelectedServer('server3')}
@@ -410,7 +420,7 @@ export default function MovieDetailsPage() {
                               : 'bg-kinodark-surface text-kinotext-muted hover:text-white'
                           }`}
                         >
-                          Zaxira 2
+                          {movie.isUzbek ? 'Zaxira 2' : 'Server 3'}
                         </button>
                       </>
                     )}
@@ -418,7 +428,7 @@ export default function MovieDetailsPage() {
                       onClick={() => setIsPlayingOnline(false)}
                       className="rounded-xl bg-kinodark-surface border border-kinodark-border px-2.5 py-1.5 text-xs font-semibold text-kinotext-muted hover:text-white ml-1"
                     >
-                      ✕ Yopish
+                      {movie.isUzbek ? '✕ Yopish' : '✕ Close'}
                     </button>
                   </div>
                 </div>
@@ -436,13 +446,17 @@ export default function MovieDetailsPage() {
                 </div>
 
                 <div className="mt-3 flex items-center justify-between text-xs text-kinotext-muted px-1">
-                  <span>Film davomiyligi: {movie.runtime || 120} daqiqa</span>
+                  <span>
+                    {movie.isUzbek
+                      ? `Film davomiyligi: ${movie.runtime || 120} daqiqa`
+                      : `Duration: ${movie.runtime || 120} min`}
+                  </span>
                   {movie.embed_url || nationalKey || movie.isUzbek ? (
                     <span className="text-emerald-400 font-semibold flex items-center gap-1">
                       <CheckCircle2 className="h-3.5 w-3.5" /> 100% O'zbek tilidagi to'liq film
                     </span>
                   ) : (
-                    <span>Agar bitta server sekin ishlasa, yuqoridagi 2-Server yoki 3-Serverni bosing.</span>
+                    <span>If one server is slow, click Server 2 or Server 3 above.</span>
                   )}
                 </div>
               </div>
@@ -450,9 +464,11 @@ export default function MovieDetailsPage() {
 
             {/* Overview / Storyline */}
             <div className="rounded-2xl border border-kinodark-border bg-kinodark-card p-6 space-y-3">
-              <h3 className="font-heading text-base font-bold text-white">Syujet (Mazmuni)</h3>
+              <h3 className="font-heading text-base font-bold text-white">
+                {movie.isUzbek ? 'Syujet (Mazmuni)' : 'Storyline (Overview)'}
+              </h3>
               <p className="text-sm text-kinotext-main leading-relaxed">
-                {movie.uz_overview || movie.overview}
+                {movie.isUzbek ? (movie.uz_overview || movie.overview) : (movie.overview || movie.uz_overview)}
               </p>
             </div>
 
@@ -461,7 +477,7 @@ export default function MovieDetailsPage() {
               <div className="rounded-2xl border border-kinodark-border bg-kinodark-card p-6">
                 <h3 className="font-heading text-base font-bold text-white flex items-center gap-2 mb-4">
                   <Users className="h-4 w-4 text-kinopurple-primary" />
-                  Bosh rollarda (Aktyorlar)
+                  {movie.isUzbek ? 'Bosh rollarda (Aktyorlar)' : 'Cast & Crew'}
                 </h3>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                   {movie.cast.map((actor) => (
@@ -494,14 +510,18 @@ export default function MovieDetailsPage() {
               <div className="flex items-center justify-between border-b border-kinodark-border/60 pb-4 mb-6">
                 <h3 className="font-heading text-lg font-bold text-white flex items-center gap-2">
                   <MessageSquare className="h-5 w-5 text-kinopurple-primary" />
-                  Tomoshabinlar fikrlari ({movieReviews.length})
+                  {movie.isUzbek
+                    ? `Tomoshabinlar fikrlari (${movieReviews.length})`
+                    : `Audience Reviews (${movieReviews.length})`}
                 </h3>
               </div>
 
               {/* Review Input Form */}
               <form onSubmit={handleReviewSubmit} className="mb-8 space-y-4">
                 <div className="flex items-center gap-3">
-                  <span className="text-xs font-semibold text-kinotext-muted">Baholang:</span>
+                  <span className="text-xs font-semibold text-kinotext-muted">
+                    {movie.isUzbek ? 'Baholang:' : 'Rate:'}
+                  </span>
                   <div className="flex items-center gap-1">
                     {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((star) => (
                       <button
@@ -526,7 +546,11 @@ export default function MovieDetailsPage() {
                     rows={3}
                     value={commentText}
                     onChange={(e) => setCommentText(e.target.value)}
-                    placeholder="Film haqidagi fikringizni yozing..."
+                    placeholder={
+                      movie.isUzbek
+                        ? "Film haqidagi fikringizni yozing..."
+                        : "Write your review..."
+                    }
                     className="w-full rounded-xl border border-kinodark-border bg-kinodark-surface p-3 text-sm text-kinotext-main placeholder-kinotext-muted/60 focus:border-kinopurple-primary focus:outline-none"
                   />
                 </div>
@@ -534,14 +558,16 @@ export default function MovieDetailsPage() {
                 <div className="flex items-center justify-between">
                   {reviewSubmitted && (
                     <span className="text-xs font-semibold text-emerald-400">
-                      Rahmat! Fikringiz qabul qilindi.
+                      {movie.isUzbek
+                        ? "Rahmat! Fikringiz qabul qilindi."
+                        : "Thank you! Your review has been submitted."}
                     </span>
                   )}
                   <button
                     type="submit"
                     className="ml-auto rounded-xl bg-kinopurple-primary px-5 py-2 text-xs font-bold text-white shadow-md shadow-kinopurple-primary/30 hover:brightness-110 transition"
                   >
-                    Fikr qoldirish
+                    {movie.isUzbek ? "Fikr qoldirish" : "Submit Review"}
                   </button>
                 </div>
               </form>
@@ -587,8 +613,12 @@ export default function MovieDetailsPage() {
       {/* Similar Movies Carousel */}
       <div className="mt-16">
         <MovieCarousel
-          title="O'xshash filmlar"
-          subtitle="Ushbu kartina muxlislari uchun maxsus tavsiyalar"
+          title={movie.isUzbek ? "O'xshash filmlar" : "Similar Movies"}
+          subtitle={
+            movie.isUzbek
+              ? "Ushbu kartina muxlislari uchun maxsus tavsiyalar"
+              : "More titles you might enjoy"
+          }
           movies={similarMovies}
         />
       </div>

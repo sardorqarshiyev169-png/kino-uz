@@ -132,7 +132,7 @@ export default function TVSeriesPage() {
                 : 'text-kinotext-muted hover:text-white'
             }`}
           >
-            Barchasi ({allSeries.length})
+            All ({allSeries.length})
           </button>
           <button
             onClick={() => setFilterTab('trending')}
@@ -142,7 +142,7 @@ export default function TVSeriesPage() {
                 : 'text-kinotext-muted hover:text-white'
             }`}
           >
-            Trenddagilar
+            Trending
           </button>
           <button
             onClick={() => setFilterTab('topRated')}
@@ -152,7 +152,7 @@ export default function TVSeriesPage() {
                 : 'text-kinotext-muted hover:text-white'
             }`}
           >
-            Top Reyting
+            Top Rated
           </button>
         </div>
       </div>
@@ -164,7 +164,7 @@ export default function TVSeriesPage() {
           type="text"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          placeholder="Serial nomi yoki tavsifi bo'yicha qidirish..."
+          placeholder="Search series by title or keyword..."
           className="w-full max-w-md rounded-xl border border-kinodark-border bg-kinodark-card py-2.5 pl-10 pr-4 text-sm text-kinotext-main placeholder-kinotext-muted/60 focus:border-kinopurple-primary focus:outline-none"
         />
       </div>
@@ -181,7 +181,7 @@ export default function TVSeriesPage() {
                   className="w-full mt-2 flex items-center justify-center gap-1.5 rounded-xl border border-kinodark-border bg-kinodark-surface py-1.5 text-[11px] font-semibold text-kinopurple-secondary hover:border-kinopurple-primary/50 transition"
                 >
                   <Layers className="h-3 w-3" />
-                  Mavsumlar & Qismlar ({series.seasons.length})
+                  Seasons & Episodes ({series.seasons.length})
                 </button>
               )}
             </div>
@@ -190,11 +190,11 @@ export default function TVSeriesPage() {
       ) : isInitialLoading ? (
         <div className="flex flex-col items-center justify-center p-16 text-center">
           <Loader2 className="h-8 w-8 text-kinopurple-primary animate-spin mb-3" />
-          <p className="text-xs text-kinotext-muted">Seriallar bazadan yuklanmoqda...</p>
+          <p className="text-xs text-kinotext-muted">Loading series from database...</p>
         </div>
       ) : (
         <div className="p-12 text-center text-kinotext-muted text-xs">
-          Hech qanday serial topilmadi.
+          No TV series found.
         </div>
       )}
 
@@ -208,12 +208,12 @@ export default function TVSeriesPage() {
           {isLoadingMore ? (
             <>
               <Loader2 className="h-4 w-4 animate-spin" />
-              <span>Yangi seriallar yuklanmoqda...</span>
+              <span>Loading more series...</span>
             </>
           ) : (
             <>
               <RefreshCw className="h-4 w-4" />
-              <span>Yana ko'proq seriallarni yuklash</span>
+              <span>Load More Series</span>
             </>
           )}
         </button>

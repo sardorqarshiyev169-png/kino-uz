@@ -76,14 +76,14 @@ export const Navbar: React.FC = () => {
   };
 
   const navLinks = [
-    { href: '/', label: 'Bosh sahifa' },
-    { href: '/movies', label: 'Filmlar', icon: Film },
-    { href: '/tv', label: 'Seriallar', icon: Tv },
+    { href: '/', label: 'Home' },
+    { href: '/movies', label: 'Movies', icon: Film },
+    { href: '/tv', label: 'TV Shows', icon: Tv },
     { href: '/anime', label: 'Anime', icon: Flame },
     { href: '/uzbek-movies', label: "O'zbek kino", badge: 'UZ' },
     {
       href: '/ai-assistant',
-      label: 'AI Maslahatchi',
+      label: 'AI Assistant',
       icon: Sparkles,
       highlight: true,
     },
@@ -154,7 +154,7 @@ export const Navbar: React.FC = () => {
                     setIsSearchOpen(true);
                   }}
                   onFocus={() => setIsSearchOpen(true)}
-                  placeholder="Kino, serial, anime yoki aktyor qidirish..."
+                  placeholder="Search movies, TV shows, actors..."
                   className="w-full rounded-full border border-kinodark-border bg-kinodark-card/90 py-2 pl-10 pr-4 text-xs lg:text-sm text-kinotext-main placeholder-kinotext-muted/60 transition focus:border-kinopurple-primary focus:bg-kinodark-surface focus:outline-none focus:ring-1 focus:ring-kinopurple-primary shadow-inner"
                 />
               </div>
@@ -164,7 +164,7 @@ export const Navbar: React.FC = () => {
             {isSearchOpen && searchResults.length > 0 && (
               <div className="absolute top-full left-0 right-0 mt-2 overflow-hidden rounded-2xl border border-kinodark-border bg-kinodark-card shadow-2xl z-50 animate-fadeIn">
                 <div className="p-2 border-b border-kinodark-border/50 text-[11px] font-semibold text-kinotext-muted uppercase tracking-wider px-3">
-                  Tezkor natijalar
+                  Quick Results
                 </div>
                 <div className="divide-y divide-kinodark-border/40">
                   {searchResults.map((movie) => (
@@ -202,7 +202,7 @@ export const Navbar: React.FC = () => {
                   onClick={() => setIsSearchOpen(false)}
                   className="block p-2.5 text-center text-xs font-semibold text-kinopurple-secondary hover:bg-kinopurple-primary/10 transition"
                 >
-                  Barcha natijalarni ko'rish →
+                  View all results →
                 </Link>
               </div>
             )}
@@ -214,7 +214,7 @@ export const Navbar: React.FC = () => {
             <Link
               href="/watchlist"
               className="relative rounded-xl p-2 text-kinotext-muted hover:bg-kinodark-surface hover:text-white transition"
-              title="Tomosha ro'yxati"
+              title="Watchlist"
             >
               <Bookmark className="h-5 w-5" />
               {watchlist.length > 0 && (
@@ -228,7 +228,7 @@ export const Navbar: React.FC = () => {
             <Link
               href="/favorites"
               className="relative rounded-xl p-2 text-kinotext-muted hover:bg-kinodark-surface hover:text-white transition"
-              title="Sevimlilar"
+              title="Favorites"
             >
               <Heart className="h-5 w-5" />
               {favorites.length > 0 && (
@@ -268,7 +268,7 @@ export const Navbar: React.FC = () => {
                       className="flex items-center gap-2 rounded-xl px-3 py-2 text-xs text-kinotext-main hover:bg-kinodark-surface transition mt-1"
                     >
                       <User className="h-4 w-4 text-kinopurple-secondary" />
-                      Mening profilim
+                      Profile
                     </Link>
 
                     {user.role === 'admin' && (
@@ -278,7 +278,7 @@ export const Navbar: React.FC = () => {
                         className="flex items-center gap-2 rounded-xl px-3 py-2 text-xs text-kinopurple-secondary bg-kinopurple-primary/10 hover:bg-kinopurple-primary/20 transition mt-1"
                       >
                         <Shield className="h-4 w-4 text-kinopurple-primary" />
-                        Admin boshqaruvi
+                        Admin Panel
                       </Link>
                     )}
 
@@ -289,7 +289,7 @@ export const Navbar: React.FC = () => {
                       }}
                       className="w-full flex items-center gap-2 rounded-xl px-3 py-2 text-xs text-rose-400 hover:bg-rose-500/10 transition mt-1 text-left"
                     >
-                      Chiqish
+                      Sign Out
                     </button>
                   </div>
                 )}
@@ -299,7 +299,7 @@ export const Navbar: React.FC = () => {
                 onClick={() => setIsAuthModalOpen(true)}
                 className="rounded-full bg-gradient-to-r from-kinopurple-primary to-[#7C3AED] px-4 py-1.5 text-xs font-semibold text-white shadow-md shadow-kinopurple-primary/30 hover:brightness-110 transition"
               >
-                Kirish
+                Sign In
               </button>
             )}
 
@@ -324,7 +324,7 @@ export const Navbar: React.FC = () => {
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Kino, serial, anime qidirish..."
+                  placeholder="Search movies, TV shows, actors..."
                   className="w-full rounded-xl border border-kinodark-border bg-kinodark-surface py-2 pl-10 pr-4 text-sm text-kinotext-main placeholder-kinotext-muted/60 focus:border-kinopurple-primary focus:outline-none"
                 />
               </div>
@@ -363,7 +363,7 @@ export const Navbar: React.FC = () => {
                   className="flex items-center gap-3 rounded-xl bg-kinopurple-primary/15 px-4 py-2.5 text-sm font-semibold text-kinopurple-secondary mt-2"
                 >
                   <Shield className="h-4 w-4 text-kinopurple-primary" />
-                  <span>Admin Boshqaruv Paneli</span>
+                  <span>Admin Panel</span>
                 </Link>
               )}
             </nav>

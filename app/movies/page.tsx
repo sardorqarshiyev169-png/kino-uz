@@ -190,19 +190,19 @@ export default function MoviesPage() {
         <div>
           <div className="flex items-center gap-2 text-kinopurple-primary text-xs font-bold uppercase tracking-wider mb-1">
             <Film className="h-4 w-4" />
-            <span>Katalog • Jonli TMDB Baza</span>
+            <span>Catalog • Live TMDB Database</span>
           </div>
           <h1 className="font-heading text-3xl sm:text-4xl font-black text-white tracking-tight">
-            Filmlar Katalogi
+            Movies Catalog
           </h1>
           <p className="text-sm text-kinotext-muted mt-1">
-            Dunyo kinematografiyasining eng sara durdonalari, haftalik premyeralar va reytingli filmlar
+            Explore thousands of top-rated movies, new arrivals, and all-time classics worldwide
           </p>
         </div>
 
         <div className="flex items-center gap-2 text-xs text-kinotext-muted font-medium bg-kinodark-surface/60 px-3.5 py-2 rounded-xl border border-kinodark-border self-start">
           <Sparkles className="h-3.5 w-3.5 text-kinopurple-secondary" />
-          <span>Mavjud filmlar: <strong className="text-white font-bold">{sortedMovies.length}</strong> ta</span>
+          <span>Available movies: <strong className="text-white font-bold">{sortedMovies.length}</strong></span>
         </div>
       </div>
 
@@ -216,7 +216,7 @@ export default function MoviesPage() {
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder="Film nomi yoki kalit so'z bo'yicha qidirish..."
+              placeholder="Search movies by title or keyword..."
               className="w-full rounded-xl border border-kinodark-border bg-kinodark-surface py-2.5 pl-10 pr-4 text-sm text-kinotext-main placeholder-kinotext-muted/60 focus:border-kinopurple-primary focus:outline-none"
             />
           </div>
@@ -228,12 +228,12 @@ export default function MoviesPage() {
               onChange={(e) => setSelectedYear(e.target.value)}
               className="w-full rounded-xl border border-kinodark-border bg-kinodark-surface py-2.5 px-3 text-sm text-kinotext-main focus:border-kinopurple-primary focus:outline-none"
             >
-              <option value="all">Barcha yillar</option>
-              <option value="2024">2024-yil</option>
-              <option value="2023">2023-yil</option>
-              <option value="2020s">2020-yillar</option>
-              <option value="2010s">2010-yillar</option>
-              <option value="classic">Klassika (&lt;2010)</option>
+              <option value="all">All Years</option>
+              <option value="2024">Year 2024</option>
+              <option value="2023">Year 2023</option>
+              <option value="2020s">2020s</option>
+              <option value="2010s">2010s</option>
+              <option value="classic">Classics (&lt;2010)</option>
             </select>
           </div>
 
@@ -244,11 +244,11 @@ export default function MoviesPage() {
               onChange={(e) => setMinRating(Number(e.target.value))}
               className="w-full rounded-xl border border-kinodark-border bg-kinodark-surface py-2.5 px-3 text-sm text-kinotext-main focus:border-kinopurple-primary focus:outline-none"
             >
-              <option value={0}>Barcha reytinglar</option>
-              <option value={8.5}>⭐ 8.5+ ball</option>
-              <option value={8.0}>⭐ 8.0+ ball</option>
-              <option value={7.5}>⭐ 7.5+ ball</option>
-              <option value={7.0}>⭐ 7.0+ ball</option>
+              <option value={0}>All Ratings</option>
+              <option value={8.5}>⭐ 8.5+ Rating</option>
+              <option value={8.0}>⭐ 8.0+ Rating</option>
+              <option value={7.5}>⭐ 7.5+ Rating</option>
+              <option value={7.0}>⭐ 7.0+ Rating</option>
             </select>
           </div>
 
@@ -259,10 +259,10 @@ export default function MoviesPage() {
               onChange={(e) => setSortBy(e.target.value as any)}
               className="w-full rounded-xl border border-kinodark-border bg-kinodark-surface py-2.5 px-3 text-sm text-kinotext-main focus:border-kinopurple-primary focus:outline-none"
             >
-              <option value="popularity">Ommabopligi bo'yicha</option>
-              <option value="rating">Reytingi bo'yicha (eng yuqori)</option>
-              <option value="newest">Chiqarilgan sanasi bo'yicha</option>
-              <option value="title">Alifbo bo'yicha (A-Z)</option>
+              <option value="popularity">Most Popular</option>
+              <option value="rating">Highest Rated</option>
+              <option value="newest">Release Date (Newest)</option>
+              <option value="title">Alphabetical (A-Z)</option>
             </select>
           </div>
         </div>
@@ -278,19 +278,19 @@ export default function MoviesPage() {
                   : 'bg-kinodark-surface text-kinotext-muted hover:text-white'
               }`}
             >
-              Barcha janrlar
+              All Genres
             </button>
             {GENRES.map((g) => (
               <button
                 key={g.id}
-                onClick={() => setSelectedGenre(g.uzName || g.name)}
+                onClick={() => setSelectedGenre(g.name)}
                 className={`rounded-xl px-3 py-1.5 text-xs font-semibold whitespace-nowrap transition ${
-                  selectedGenre === (g.uzName || g.name)
+                  selectedGenre === g.name
                     ? 'bg-kinopurple-primary text-white shadow-glow-purple'
                     : 'bg-kinodark-surface text-kinotext-muted hover:text-white'
                 }`}
               >
-                {g.uzName || g.name}
+                {g.name}
               </button>
             ))}
           </div>
@@ -307,14 +307,14 @@ export default function MoviesPage() {
       ) : isInitialLoading ? (
         <div className="flex flex-col items-center justify-center p-16 text-center">
           <Loader2 className="h-8 w-8 text-kinopurple-primary animate-spin mb-3" />
-          <p className="text-xs text-kinotext-muted">Kinolar bazadan yuklanmoqda...</p>
+          <p className="text-xs text-kinotext-muted">Loading movies from database...</p>
         </div>
       ) : (
         <div className="flex flex-col items-center justify-center rounded-2xl border border-kinodark-border bg-kinodark-card p-12 text-center">
           <Film className="h-12 w-12 text-kinotext-muted mb-3" />
-          <h3 className="font-heading text-lg font-bold text-white">Hech narsa topilmadi</h3>
+          <h3 className="font-heading text-lg font-bold text-white">No movies found</h3>
           <p className="text-xs text-kinotext-muted mt-1 max-w-sm">
-            Tanlangan filtrlarga mos keluvchi filmlar topilmadi. Filtrlarni o'zgartirib qayta urinib ko'ring.
+            Try adjusting your search or filters to find what you're looking for.
           </p>
           <button
             onClick={() => {
@@ -325,7 +325,7 @@ export default function MoviesPage() {
             }}
             className="mt-4 rounded-xl bg-kinopurple-primary px-4 py-2 text-xs font-semibold text-white"
           >
-            Filtrlarni tozalash
+            Reset Filters
           </button>
         </div>
       )}
@@ -340,17 +340,17 @@ export default function MoviesPage() {
           {isLoadingMore ? (
             <>
               <Loader2 className="h-4 w-4 animate-spin" />
-              <span>Yangi filmlar yuklanmoqda...</span>
+              <span>Loading more movies...</span>
             </>
           ) : (
             <>
               <RefreshCw className="h-4 w-4" />
-              <span>Yana ko'proq kinolarni yuklash</span>
+              <span>Load More Movies</span>
             </>
           )}
         </button>
         <p className="text-[11px] text-kinotext-muted mt-2">
-          TMDB jahon kinolar bazasi bilan avtomatik bog'langan — har hafta yangi kinolar qo'shilib boradi
+          Connected to the global TMDB database — fresh movies added continuously
         </p>
       </div>
     </div>

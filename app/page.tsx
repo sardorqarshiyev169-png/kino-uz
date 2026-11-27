@@ -136,10 +136,10 @@ export default function HomePage() {
             </div>
             <div>
               <h4 className="text-xs font-bold text-white uppercase tracking-wide">
-                AI Kino Maslahatchisi
+                AI Movie Assistant
               </h4>
               <p className="text-[11px] text-kinotext-muted">
-                O'zbek tilida tabiiy muloqot va aqlli tavsiyalar
+                Smart recommendations & natural movie discovery
               </p>
             </div>
           </div>
@@ -150,10 +150,10 @@ export default function HomePage() {
             </div>
             <div>
               <h4 className="text-xs font-bold text-white uppercase tracking-wide">
-                TMDB & IMDb Reytinglari
+                TMDB & IMDb Ratings
               </h4>
               <p className="text-[11px] text-kinotext-muted">
-                Haqiqiy tomoshabinlar va tanqidchilar bahosi
+                Verified critic scores & real audience ratings
               </p>
             </div>
           </div>
@@ -164,10 +164,10 @@ export default function HomePage() {
             </div>
             <div>
               <h4 className="text-xs font-bold text-white uppercase tracking-wide">
-                Qonuniy Tomosha
+                Official Streaming
               </h4>
               <p className="text-[11px] text-kinotext-muted">
-                Allplay, ITV, Kinopoisk va Netflix havolalari
+                Direct player streams & official streaming info
               </p>
             </div>
           </div>
@@ -176,8 +176,8 @@ export default function HomePage() {
 
       {/* 2. Trending Movies ("Hozirda trendda") */}
       <MovieCarousel
-        title="Trenddagi filmlar"
-        subtitle="Hozirda butun dunyo tomosha qilayotgan eng ommabop filmlar"
+        title="Trending Movies"
+        subtitle="The most popular movies worldwide right now"
         movies={trending}
         viewAllLink="/movies?sort=popularity"
         icon={TrendingUp}
@@ -189,58 +189,59 @@ export default function HomePage() {
         subtitle="Super kelinchak, Shum bola, O'tkan kunlar, Cho'qintirgan ota (1, 2, 3), Forsaj 1 — barchasi 100% o'zbek tilida"
         movies={UZBEK_MOVIES}
         viewAllLink="/uzbek-movies"
+        viewAllText="Barchasini ko'rish →"
         icon={Award}
       />
 
-      {/* 3. Popular Movies ("Mashhur filmlar") */}
+      {/* 3. Popular Movies */}
       <MovieCarousel
-        title="Mashhur filmlar"
-        subtitle="Tomoshabinlar mehrini qozongan sevimli kartinalar"
+        title="Popular Movies"
+        subtitle="Fan-favorite blockbusters and timeless cinema"
         movies={popular}
         viewAllLink="/movies?sort=popularity"
         icon={Flame}
       />
 
-      {/* 4. Top Rated Movies ("Eng yuqori reytingli durdonalar") */}
+      {/* 4. Top Rated Movies */}
       <MovieCarousel
-        title="Eng yuqori reytingli filmlar"
-        subtitle="Kinematografiya tarixidagi eng nufuzli shoh asarlar"
+        title="Top Rated Movies"
+        subtitle="All-time highest rated cinema masterpieces"
         movies={topRated}
         viewAllLink="/movies?sort=rating"
         icon={Star}
       />
 
-      {/* 5. Recently Released Movies ("Yangi premyerlar") */}
+      {/* 5. Recently Released Movies */}
       <MovieCarousel
-        title="Yangi premyerlar (2024)"
-        subtitle="Eng so'nggi chiqqan kino yangiliklari"
+        title="New Releases (2024)"
+        subtitle="The latest movie releases and fresh arrivals"
         movies={recent}
         viewAllLink="/movies?year=2024"
         icon={Clock}
       />
 
-      {/* 6. Popular TV Series ("Ommabop seriallar") */}
+      {/* 6. Popular TV Series */}
       <MovieCarousel
-        title="Ommabop seriallar"
-        subtitle="Bir nafasda ko'riladigan ko'p qismli durdonalar"
+        title="Popular TV Series"
+        subtitle="Trending TV series and binge-worthy shows"
         movies={tvSeries}
         viewAllLink="/tv"
         icon={Tv}
       />
 
-      {/* 7. Anime Recommendations ("Anime olami") */}
+      {/* 7. Anime Recommendations */}
       <MovieCarousel
-        title="Yapon Anime olami"
-        subtitle="Titanlar jangi, Demon Slayer va Miyazaki ertaklari"
+        title="Anime & Animation"
+        subtitle="Top-rated anime series and cinematic stories"
         movies={anime}
         viewAllLink="/anime"
         icon={Sparkles}
       />
 
-      {/* 8. Personalized Recommendations ("Siz uchun tavsiyalar") */}
+      {/* 8. Personalized Recommendations */}
       <MovieCarousel
-        title="Siz uchun shaxsiy tavsiyalar"
-        subtitle="Qiziqishlaringiz va didingizga asoslangan kino saralari"
+        title="Recommended For You"
+        subtitle="Curated picks tailored to your interests"
         movies={personalized}
         viewAllLink="/movies"
         icon={Compass}
@@ -252,13 +253,13 @@ export default function HomePage() {
           <div>
             <div className="inline-flex items-center gap-1.5 rounded-full bg-kinopurple-primary/20 px-3 py-1 text-xs font-bold text-kinopurple-secondary border border-kinopurple-primary/30 mb-2">
               <Sparkles className="h-3.5 w-3.5" />
-              Aqlli tavsiya tizimi
+              Smart Movie Discovery
             </div>
             <h2 className="font-heading text-2xl sm:text-3xl font-black text-white tracking-tight">
-              Kino uz AI Maslahatchisi
+              Kino uz AI Assistant
             </h2>
             <p className="text-sm text-kinotext-muted mt-1 max-w-xl">
-              Nima ko'rishni bilmayapsizmi? Shunchaki istagingizni o'zbek tilida yozing va sun'iy intellekt sizga eng mos filmlarni topib beradi.
+              Don't know what to watch? Tell the AI what kind of vibe, genre, or mood you want, and discover great movies instantly.
             </p>
           </div>
 
@@ -266,7 +267,7 @@ export default function HomePage() {
             href="/ai-assistant"
             className="inline-flex items-center gap-2 rounded-xl border border-kinopurple-primary/50 bg-kinopurple-primary/10 px-4 py-2.5 text-xs font-bold text-kinopurple-secondary hover:bg-kinopurple-primary/20 transition self-start"
           >
-            To'liq ekranda ochish <ArrowRight className="h-4 w-4" />
+            Open Fullscreen <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
 

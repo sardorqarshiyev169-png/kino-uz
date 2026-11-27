@@ -48,8 +48,8 @@ export const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
             {movie.media_type === 'tv'
               ? 'TV'
               : movie.media_type === 'anime'
-              ? 'Anime'
-              : 'Film'}
+              ? 'ANIME'
+              : 'MOVIE'}
           </span>
         </div>
 
@@ -64,7 +64,7 @@ export const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
                 openTrailer(movie.trailer_key!);
               }}
               className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-kinopurple-primary to-[#7C3AED] text-white shadow-lg shadow-kinopurple-primary/50 transition-transform duration-200 hover:scale-110"
-              title="Treylerni ko'rish"
+              title="Watch Trailer"
             >
               <Play className="h-5 w-5 fill-current ml-0.5" />
             </button>
@@ -83,7 +83,7 @@ export const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
                   ? 'bg-rose-500 border-rose-400 text-white shadow-md shadow-rose-500/40'
                   : 'bg-kinodark-surface/80 border-kinodark-border text-kinotext-muted hover:text-rose-400'
               }`}
-              title="Sevimlilarga qo'shish"
+              title="Add to Favorites"
             >
               <Heart className={`h-4 w-4 ${isFav ? 'fill-current' : ''}`} />
             </button>
@@ -99,7 +99,7 @@ export const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
                   ? 'bg-kinopurple-primary border-kinopurple-secondary text-white shadow-glow-purple'
                   : 'bg-kinodark-surface/80 border-kinodark-border text-kinotext-muted hover:text-white'
               }`}
-              title="Tomosha ro'yxatiga qo'shish"
+              title="Add to Watchlist"
             >
               <Bookmark className={`h-4 w-4 ${isSaved ? 'fill-current' : ''}`} />
             </button>
@@ -109,7 +109,7 @@ export const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
             href={`/movie/${movie.id}`}
             className="text-[11px] font-semibold text-kinopurple-secondary hover:underline mt-1"
           >
-            Batafsil ma'lumot →
+            {movie.isUzbek ? "Batafsil ma'lumot →" : "View Details →"}
           </Link>
         </div>
       </div>
